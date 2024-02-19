@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Introduction</title>
+    <link href="/2024/02/19/Introduction/"/>
+    <url>/2024/02/19/Introduction/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Static-Analysis"><a href="#Static-Analysis" class="headerlink" title="Static Analysis"></a>Static Analysis</h2><h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1 - 定义"></a>1 - 定义</h4><p>静态分析通过分析程序 P 来推理其行为，并在运行 P 之前确定其是否满足某些属性。</p><blockquote><p>Static analysis analyzes a program P to reason about its behaviors and determines whether it satisfies some properties before running P.</p></blockquote><ul><li>Does P contain any private information leaks?</li><li>Does P dereference any null pointers?</li><li>Are all the cast operations in P safe?<br><em>- 是否存在强制类型转换异常？</em></li><li>Can v1 and v2 in P point to the same memory location?</li><li>Will certain assert staements in P fail?<br><em>- 是否存在 fail 的 assert 语句？</em></li><li>Is this piece of code in P dead(so that it could be eliminated?)<br><em>- 是否存在可以删除的死代码？</em></li></ul><h4 id="2-Rice’s-Theorem-莱斯定理"><a href="#2-Rice’s-Theorem-莱斯定理" class="headerlink" title="2 - Rice’s Theorem(莱斯定理)"></a>2 - Rice’s Theorem(莱斯定理)</h4><p>通俗的讲：不存在完美的静态分析方法(Perfect static analysis)。</p><blockquote><p>Perfect static &#x3D; Sound &amp; Complete</p></blockquote><p><a href="/Introduction/Sound-Complete.png">Sound &amp; Complete</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Static Analysis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Introduction</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learning Markdown~</title>
     <link href="/2024/02/19/Learning-Markdown/"/>
     <url>/2024/02/19/Learning-Markdown/</url>
