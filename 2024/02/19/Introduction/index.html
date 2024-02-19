@@ -23,13 +23,14 @@
 <meta property="og:site_name" content="Kevin&#39;s Blog">
 <meta property="og:description" content="Static Analysis1 - Define静态分析通过分析程序 P 来推理其行为，并在运行 P 之前确定其是否满足某些属性。  Static analysis analyzes a program P to reason about its behaviors and determines whether it satisfies some properties before runnin">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/Introduction/Sound-Complete.png">
+<meta property="og:image" content="http://example.com/2024/02/19/Introduction/Sound-Complete.png">
+<meta property="og:image" content="http://example.com/2024/02/19/Introduction/Two-Results.png">
 <meta property="article:published_time" content="2024-02-19T06:19:39.000Z">
-<meta property="article:modified_time" content="2024-02-19T07:54:57.981Z">
+<meta property="article:modified_time" content="2024-02-19T08:26:37.489Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="Introduction">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/Introduction/Sound-Complete.png">
+<meta name="twitter:image" content="http://example.com/2024/02/19/Introduction/Sound-Complete.png">
   
   
   
@@ -251,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          274 words
+          271 words
         
       </span>
     
@@ -328,7 +329,7 @@
 <blockquote>
 <p>Perfect static &#x3D; Sound &amp; Complete</p>
 </blockquote>
-<p><img src="/./Introduction/Sound-Complete.png" srcset="/img/loading.gif" lazyload alt="Sound &amp; Complete">{width&#x3D;500}</p>
+<p><img src="/2024/02/19/Introduction/Sound-Complete.png" srcset="/img/loading.gif" lazyload alt="Sound &amp; Complete"></p>
 <p>真正的有用的静态分析：妥协soundness或者completeness。</p>
 <blockquote>
 <p>Useful static analysis &#x3D; Compromise soundness OR Compromise completeness</p>
@@ -338,10 +339,7 @@
 </blockquote>
 <h4 id="3-Static-Analysis-–Bird’s-Eye-View-整体概括"><a href="#3-Static-Analysis-–Bird’s-Eye-View-整体概括" class="headerlink" title="3 - Static Analysis –Bird’s Eye View( 整体概括 )"></a>3 - Static Analysis –Bird’s Eye View( 整体概括 )</h4><p>打破动态思维，从静态分析角度分析代码。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span>(input)<br>    x = <span class="hljs-number">1</span>;<br><span class="hljs-keyword">else</span><br>    x = <span class="hljs-number">0</span>;<br>-&gt; x = ?<br></code></pre></td></tr></table></figure>
-<p>Sound: x &#x3D; 0, 1, 2, 3<br>Unsound: x &#x3D; -1, 0</p>
-<!-- ![Two analysis results](./Introduction/Two-Results.png){width=300} -->
-
-
+<p>Sound: x &#x3D; 0, 1, 2, 3<br>Unsound: x &#x3D; -1, 0<br><img src="/2024/02/19/Introduction/Two-Results.png" srcset="/img/loading.gif" lazyload alt="Two analysis results"></p>
 <p><strong>Static Analysis</strong>: ensure( or get close to )<em>soundness</em>, while making good trade-offs between analysis <em>precision</em> and analysis <em>speed</em>.</p>
 <blockquote>
 <p>在确保 soundness 的前提下，在分析的准确度和速度之间做出有效的平衡。</p>
