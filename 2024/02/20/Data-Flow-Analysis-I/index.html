@@ -23,11 +23,15 @@
 <meta property="og:site_name" content="Kevin&#39;s Blog">
 <meta property="og:description" content="Overview of Data Flow Analysis1 - Data Flow AnalysisData Flow Analysis -&gt; How Data Flows on CFGHow application-specific Data( Abstraction ) Flows( Over-approximation ) through the Nodes( BB ) and E">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Input-Output.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Notations-Function.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Notations-ControlFlow.png">
 <meta property="article:published_time" content="2024-02-20T07:48:22.000Z">
-<meta property="article:modified_time" content="2024-02-20T08:10:52.073Z">
+<meta property="article:modified_time" content="2024-02-20T08:51:31.229Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/Data-Flow-Analysis-I/Input-Output.png">
   
   
   
@@ -253,7 +257,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          22 words
+          147 words
         
       </span>
     
@@ -264,7 +268,7 @@
         
         
         
-          1 mins
+          2 mins
         
       </span>
     
@@ -319,7 +323,31 @@
 <li>Each execution of an IR statement transforms an input state to a new output state.</li>
 <li>The input( output ) state is associated with the program point before( after ) the statement.</li>
 </ul>
-<h1 id="Reaching-Definitions-Analysis"><a href="#Reaching-Definitions-Analysis" class="headerlink" title="Reaching Definitions Analysis"></a>Reaching Definitions Analysis</h1><h1 id="Live-Variables-Analysis"><a href="#Live-Variables-Analysis" class="headerlink" title="Live Variables Analysis"></a>Live Variables Analysis</h1><h1 id="Available-Expressions-Analysis"><a href="#Available-Expressions-Analysis" class="headerlink" title="Available Expressions Analysis"></a>Available Expressions Analysis</h1>
+<img src="/images/Data-Flow-Analysis-I/Input-Output.png" srcset="/img/loading.gif" lazyload width=650>
+
+<ul>
+<li><p>In each data-flow analysis application, we associate with every program point a <strong>data-flow value</strong> that represents and <em>abstraction</em> of the set of all possible <strong>program states</strong> that can be abserved foe that point.</p>
+<blockquote>
+<p>在数据流分析应用中，将每一个 program point 与一个 表示该点所有观测到的 program states 的集合的抽象的数据流值（data-flow value） 联系起来。</p>
+</blockquote>
+</li>
+<li><p>Data-flow analysis is to <strong>find a solution</strong> to a set of <em><strong>safe-approximation-directed constraints</strong></em> on the IN[s]’s and OUT[s]’s, for <em>all statements s.</em></p>
+<ul>
+<li>constraints based on semantics of statements( transfer functions ).</li>
+<li>constraints baesd on the flows of control.<blockquote>
+<p>数据流分析是对所有的语句，通过解析 safe-approximation 的约束规则，得到一个 solution（给每个 program point 一个 data-flow value）。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-Notations-for-Transfer-Function’s-Constraints"><a href="#2-Notations-for-Transfer-Function’s-Constraints" class="headerlink" title="2 - Notations for Transfer Function’s Constraints"></a>2 - Notations for Transfer Function’s Constraints</h2><p>Forward &amp; Backward</p>
+<img src="/images/Data-Flow-Analysis-I/Notations-Function.png" srcset="/img/loading.gif" lazyload width=480>
+
+<h2 id="3-Notations-for-Control-Flow’s-Constraints"><a href="#3-Notations-for-Control-Flow’s-Constraints" class="headerlink" title="3 - Notations for Control Flow’s Constraints"></a>3 - Notations for Control Flow’s Constraints</h2><p>Control flow within a BB &amp; Control flow among BBs</p>
+<img src="/images/Data-Flow-Analysis-I/Notations-ControlFlow.png" srcset="/img/loading.gif" lazyload width=550>
+
+<h1 id="Reaching-Definitions-Analysis-定义可达性分析"><a href="#Reaching-Definitions-Analysis-定义可达性分析" class="headerlink" title="Reaching Definitions Analysis( 定义可达性分析 )"></a>Reaching Definitions Analysis( 定义可达性分析 )</h1><h1 id="Live-Variables-Analysis-活跃变量分析"><a href="#Live-Variables-Analysis-活跃变量分析" class="headerlink" title="Live Variables Analysis( 活跃变量分析 )"></a>Live Variables Analysis( 活跃变量分析 )</h1><h1 id="Available-Expressions-Analysis-可用表达式分析"><a href="#Available-Expressions-Analysis-可用表达式分析" class="headerlink" title="Available Expressions Analysis( 可用表达式分析 )"></a>Available Expressions Analysis( 可用表达式分析 )</h1>
                 
               </div>
             
