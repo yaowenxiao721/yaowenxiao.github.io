@@ -24,8 +24,9 @@
 <meta property="og:description" content="Compilers and Static Analyzers1 - CompilerSource Code -&gt; Scanner( 词法分析 ) -&gt; Tokens -&gt; Parser( 语法分析 ) -&gt; AST -&gt; Type Checker( 类型检查 ) -&gt; Decorated AST -&gt; Translatror -&gt; IR -&gt;">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/Intermediate-Representation/AST-IR.png">
+<meta property="og:image" content="http://example.com/images/Intermediate-Representation/SSA.png">
 <meta property="article:published_time" content="2024-02-19T11:21:23.000Z">
-<meta property="article:modified_time" content="2024-02-19T12:02:22.402Z">
+<meta property="article:modified_time" content="2024-02-20T03:49:01.404Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="Intermediate-Representation">
 <meta name="twitter:card" content="summary_large_image">
@@ -255,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          89 words
+          173 words
         
       </span>
     
@@ -266,7 +267,7 @@
         
         
         
-          1 mins
+          2 mins
         
       </span>
     
@@ -318,7 +319,7 @@
                 
                 <h1 id="Compilers-and-Static-Analyzers"><a href="#Compilers-and-Static-Analyzers" class="headerlink" title="Compilers and Static Analyzers"></a>Compilers and Static Analyzers</h1><h2 id="1-Compiler"><a href="#1-Compiler" class="headerlink" title="1 - Compiler"></a>1 - Compiler</h2><p>Source Code -&gt; Scanner( 词法分析 ) -&gt; <em>Tokens</em> -&gt; Parser( 语法分析 ) -&gt; <em>AST</em> -&gt; Type Checker( 类型检查 ) -&gt; <em>Decorated AST</em> -&gt; Translatror -&gt; <em>IR</em> -&gt; Code Generator -&gt; Machine Code</p>
 <p>静态分析需要在编译器前端生成的 IR 的基础上进行代码优化。</p>
-<h1 id="AST-vs-IR"><a href="#AST-vs-IR" class="headerlink" title="AST vs. IR"></a>AST vs. IR</h1><img src="/images/Intermediate-Representation/AST-IR.png" srcset="/img/loading.gif" lazyload>
+<h1 id="AST-vs-IR"><a href="#AST-vs-IR" class="headerlink" title="AST vs. IR"></a>AST vs. IR</h1><img src="/images/Intermediate-Representation/AST-IR.png" srcset="/img/loading.gif" lazyload alt="AST vs. IR">
 
 <h2 id="1-AST"><a href="#1-AST" class="headerlink" title="1 - AST"></a>1 - AST</h2><ul>
 <li>high-level and closed to grammar structure</li>
@@ -327,14 +328,14 @@
 <li>suitable for fast type checking</li>
 <li>lack of control flow information</li>
 </ul>
-<h2 id="2-Intermediate-Representation-IR-“3-address”-form"><a href="#2-Intermediate-Representation-IR-“3-address”-form" class="headerlink" title="2 - Intermediate Representation( IR “3-address” form )"></a>2 - Intermediate Representation( IR “3-address” form )</h2><ul>
+<h1 id="IR-Three-Address-Code-3AC"><a href="#IR-Three-Address-Code-3AC" class="headerlink" title="IR:Three-Address Code( 3AC )"></a>IR:Three-Address Code( 3AC )</h1><h2 id="1-Intermediate-Representation-IR-“3-address”-form"><a href="#1-Intermediate-Representation-IR-“3-address”-form" class="headerlink" title="1 - Intermediate Representation( IR “3-address” form )"></a>1 - Intermediate Representation( IR “3-address” form )</h2><ul>
 <li>low-level and closed to machine code</li>
 <li>usually language independent</li>
 <li>compact and uniform</li>
 <li>contains control flow information</li>
 <li><strong>usually considered as the basis for static analysis</strong></li>
 </ul>
-<h2 id="3-Some-Common-3AC-Forms"><a href="#3-Some-Common-3AC-Forms" class="headerlink" title="3 - Some Common 3AC Forms"></a>3 - Some Common 3AC Forms</h2><ul>
+<h2 id="2-Some-Common-3AC-Forms"><a href="#2-Some-Common-3AC-Forms" class="headerlink" title="2 - Some Common 3AC Forms"></a>2 - Some Common 3AC Forms</h2><ul>
 <li>x &#x3D; y <em>bop</em> z</li>
 <li>x &#x3D; <em>uop</em> y</li>
 <li>x &#x3D; y</li>
@@ -342,7 +343,14 @@
 <li>if x goto L</li>
 <li>if x rop y goto L</li>
 </ul>
-<h2 id="4-Some-real-world-complicated-forms"><a href="#4-Some-real-world-complicated-forms" class="headerlink" title="4 - Some real-world complicated forms"></a>4 - Some real-world complicated forms</h2><h1 id="IR-Three-Address-Code-3AC"><a href="#IR-Three-Address-Code-3AC" class="headerlink" title="IR:Three-Address Code( 3AC )"></a>IR:Three-Address Code( 3AC )</h1><h1 id="3AC-in-Real-Static-Analyzer-Soot"><a href="#3AC-in-Real-Static-Analyzer-Soot" class="headerlink" title="3AC in Real Static Analyzer: Soot"></a>3AC in Real Static Analyzer: Soot</h1><h1 id="Static-Single-Assignment-SSA"><a href="#Static-Single-Assignment-SSA" class="headerlink" title="Static Single Assignment ( SSA )"></a>Static Single Assignment ( SSA )</h1><h1 id="Basic-Blocks-BB"><a href="#Basic-Blocks-BB" class="headerlink" title="Basic Blocks( BB )"></a>Basic Blocks( BB )</h1><h1 id="Control-Flow-Graphs-CFG"><a href="#Control-Flow-Graphs-CFG" class="headerlink" title="Control Flow Graphs ( CFG )"></a>Control Flow Graphs ( CFG )</h1>
+<h1 id="3AC-in-Real-Static-Analyzer-Soot"><a href="#3AC-in-Real-Static-Analyzer-Soot" class="headerlink" title="3AC in Real Static Analyzer: Soot"></a>3AC in Real Static Analyzer: Soot</h1><h2 id="1-Some-real-world-complicated-forms"><a href="#1-Some-real-world-complicated-forms" class="headerlink" title="1 - Some real-world complicated forms"></a>1 - Some real-world complicated forms</h2><p>Java Src</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> nju.sa.examples;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Class3AC</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> <span class="hljs-variable">pi</span> <span class="hljs-operator">=</span> <span class="hljs-number">3.14</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>3AC(jimple)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">nju</span>.sa.examples.Class3AC <span class="hljs-keyword">extends</span> <span class="hljs-title class_">java</span>.lang.Object<br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> pi;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> &lt;init&gt;()<br>    &#123;<br>        nju.sa.examples.Class3AC r0;<br>        r0 := <span class="hljs-meta">@this</span>: nju.sa.examples.Class3AC;<br>        specialinvoke r0.&lt;java,lang.Object: <span class="hljs-keyword">void</span> &lt;init&gt;()&gt;();<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(java.lang.String[])</span><br>    &#123;<br>        java.lang.String[] r0;<br>        r0 := <span class="hljs-meta">@parameter0</span>: java.lang.string[];<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> &lt;clinit&gt;()<br>    &#123;<br>        &lt;nju.sa.examples.Class3AC: <span class="hljs-type">double</span> pi&gt; = <span class="hljs-number">3.14</span>;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Static-Single-Assignment-SSA-–-Optional-material"><a href="#Static-Single-Assignment-SSA-–-Optional-material" class="headerlink" title="Static Single Assignment ( SSA ) – Optional material"></a>Static Single Assignment ( SSA ) – <em>Optional material</em></h1><p>All assignments in SSA are to variables with distinct names<br><img src="/images/Intermediate-Representation/SSA.png" srcset="/img/loading.gif" lazyload alt="SSA" width=400></p>
+<h1 id="Basic-Blocks-BB"><a href="#Basic-Blocks-BB" class="headerlink" title="Basic Blocks( BB )"></a>Basic Blocks( BB )</h1><h1 id="Control-Flow-Graphs-CFG"><a href="#Control-Flow-Graphs-CFG" class="headerlink" title="Control Flow Graphs ( CFG )"></a>Control Flow Graphs ( CFG )</h1>
                 
               </div>
             
