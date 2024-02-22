@@ -26,8 +26,13 @@
 <meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Input-Output.png">
 <meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Notations-Function.png">
 <meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Notations-ControlFlow.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Reaching-Definitions.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/bit-vectors.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/TF.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/CF.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Algorithm.png">
 <meta property="article:published_time" content="2024-02-20T07:48:22.000Z">
-<meta property="article:modified_time" content="2024-02-20T08:51:31.229Z">
+<meta property="article:modified_time" content="2024-02-22T09:32:33.405Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
@@ -257,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          147 words
+          386 words
         
       </span>
     
@@ -268,7 +273,7 @@
         
         
         
-          2 mins
+          4 mins
         
       </span>
     
@@ -347,7 +352,51 @@
 <h2 id="3-Notations-for-Control-Flow’s-Constraints"><a href="#3-Notations-for-Control-Flow’s-Constraints" class="headerlink" title="3 - Notations for Control Flow’s Constraints"></a>3 - Notations for Control Flow’s Constraints</h2><p>Control flow within a BB &amp; Control flow among BBs</p>
 <img src="/images/Data-Flow-Analysis-I/Notations-ControlFlow.png" srcset="/img/loading.gif" lazyload width=550>
 
-<h1 id="Reaching-Definitions-Analysis-定义可达性分析"><a href="#Reaching-Definitions-Analysis-定义可达性分析" class="headerlink" title="Reaching Definitions Analysis( 定义可达性分析 )"></a>Reaching Definitions Analysis( 定义可达性分析 )</h1><h1 id="Live-Variables-Analysis-活跃变量分析"><a href="#Live-Variables-Analysis-活跃变量分析" class="headerlink" title="Live Variables Analysis( 活跃变量分析 )"></a>Live Variables Analysis( 活跃变量分析 )</h1><h1 id="Available-Expressions-Analysis-可用表达式分析"><a href="#Available-Expressions-Analysis-可用表达式分析" class="headerlink" title="Available Expressions Analysis( 可用表达式分析 )"></a>Available Expressions Analysis( 可用表达式分析 )</h1>
+<h1 id="Reaching-Definitions-Analysis-定义可达性分析"><a href="#Reaching-Definitions-Analysis-定义可达性分析" class="headerlink" title="Reaching Definitions Analysis( 定义可达性分析 )"></a><em>Reaching Definitions Analysis( 定义可达性分析 )</em></h1><h2 id="1-Reaching-Definitions"><a href="#1-Reaching-Definitions" class="headerlink" title="1 - Reaching Definitions"></a>1 - Reaching Definitions</h2><p>A definition d at program point p reaches a point q if there is a path from p to q such that d is not “killed” along that path.</p>
+<img src="/images/Data-Flow-Analysis-I/Reaching-Definitions.png" srcset="/img/loading.gif" lazyload width=350>
+
+<blockquote>
+<ul>
+<li>A definition of a variable v is a statement that assigns a value to v.</li>
+<li>Translated as: definition of variable v at program point p reaches point q if there is a path from p to q such that <em><strong>no new definition of v</strong></em> appears on that path.</li>
+</ul>
+</blockquote>
+<h2 id="2-Understanding-Reaching-Definitions"><a href="#2-Understanding-Reaching-Definitions" class="headerlink" title="2 - Understanding Reaching Definitions"></a>2 - Understanding Reaching Definitions</h2><p>定义可达性可以用于侦测可能的未定义的变量。</p>
+<p>理解定义可达性分析：</p>
+<ul>
+<li><p>用一个比特表示某个变量在某一点的定义可达性。</p>
+</li>
+<li><p>用一个 n 维比特向量表示 n 个变量在某一点的定义可达性。</p>
+</li>
+<li><p>Data Flow Values&#x2F;Facts</p>
+<blockquote>
+<p>Represented by bit vectors<br><img src="/images/Data-Flow-Analysis-I/bit-vectors.png" srcset="/img/loading.gif" lazyload width=350>  </p>
+</blockquote>
+</li>
+<li><p>Transfer Function</p>
+<blockquote>
+<img src="/images/Data-Flow-Analysis-I/TF.png" srcset="/img/loading.gif" lazyload width=350>  
+
+<blockquote>
+<p>genB就是B里面的definition,killB就是其他BB里面被覆盖掉的<br>definition。</p>
+</blockquote>
+</blockquote>
+</li>
+<li><p>Control Flow</p>
+<blockquote>
+<img src="/images/Data-Flow-Analysis-I/CF.png" srcset="/img/loading.gif" lazyload width=350></blockquote>
+</li>
+</ul>
+<h2 id="3-Algorithm-of-Reaching-Definitions-Analysis"><a href="#3-Algorithm-of-Reaching-Definitions-Analysis" class="headerlink" title="3 - Algorithm of Reaching Definitions Analysis"></a>3 - Algorithm of Reaching Definitions Analysis</h2><img src="/images/Data-Flow-Analysis-I/Algorithm.png" srcset="/img/loading.gif" lazyload width=500>
+
+<blockquote>
+<p>在算法模板中边界条件（OUT[entry]）单独初始化。<br>对于 OUT[B]，may analysis 一般初始化为空；must analysis 一般初始化为 top。</p>
+</blockquote>
+<h2 id="4-Why-this-iterative-algorithm-can-finally-stop"><a href="#4-Why-this-iterative-algorithm-can-finally-stop" class="headerlink" title="4 - Why this iterative algorithm can finally stop?"></a>4 - Why this iterative algorithm can finally stop?</h2><p>对于 Transfer Function，OUT[S] 只受 IN[S] 的影响，当个更多的 facts 流入 IN[S] 时，要么被 kill 要么存活下来并永远被保留，故 OUT[S] <strong>永远不会缩减（e.g. 0 &#x3D;&gt; 1 或 1 &#x3D;&gt; 1）</strong>，又因为定义的变量数量是有限的，故该迭代一定会停下来（实际上到达了一个不动点）</p>
+<blockquote>
+<p>Reach a fixed point also related with monotonicity( 单调性 )</p>
+</blockquote>
+<h1 id="Live-Variables-Analysis-活跃变量分析"><a href="#Live-Variables-Analysis-活跃变量分析" class="headerlink" title="Live Variables Analysis( 活跃变量分析 )"></a><em>Live Variables Analysis( 活跃变量分析 )</em></h1><h1 id="Available-Expressions-Analysis-可用表达式分析"><a href="#Available-Expressions-Analysis-可用表达式分析" class="headerlink" title="Available Expressions Analysis( 可用表达式分析 )"></a><em>Available Expressions Analysis( 可用表达式分析 )</em></h1>
                 
               </div>
             
