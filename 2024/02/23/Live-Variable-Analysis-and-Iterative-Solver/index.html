@@ -16,37 +16,27 @@
   <meta name="author" content="Yao wenxiao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Overview of Data Flow Analysis1 - Data Flow AnalysisData Flow Analysis -&gt; How Data Flows on CFGHow application-specific Data( Abstraction ) Flows( Over-approximation ) through the Nodes( BB ) and E">
+    <meta name="description" content="作业导览 为 Java 实现一个活跃变量分析（Live Variable Analysis）。 实现一个通用的迭代求解器（Iterative Solver），用于求解数据流分析问题，也就是本次作业中的活跃变量分析。  实现LiveVariableAnalysis中的API SetFact newBoundaryFact(CFG) SetFact newInitialFact() void meet">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Data-Flow-Analysis( Application )">
-<meta property="og:url" content="http://example.com/2024/02/20/Data-Flow-Analysis-I/index.html">
+<meta property="og:title" content="Live-Variable-Analysis-and-Iterative-Solver">
+<meta property="og:url" content="http://example.com/2024/02/23/Live-Variable-Analysis-and-Iterative-Solver/index.html">
 <meta property="og:site_name" content="Kevin&#39;s Blog">
-<meta property="og:description" content="Overview of Data Flow Analysis1 - Data Flow AnalysisData Flow Analysis -&gt; How Data Flows on CFGHow application-specific Data( Abstraction ) Flows( Over-approximation ) through the Nodes( BB ) and E">
+<meta property="og:description" content="作业导览 为 Java 实现一个活跃变量分析（Live Variable Analysis）。 实现一个通用的迭代求解器（Iterative Solver），用于求解数据流分析问题，也就是本次作业中的活跃变量分析。  实现LiveVariableAnalysis中的API SetFact newBoundaryFact(CFG) SetFact newInitialFact() void meet">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Input-Output.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Notations-Function.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Notations-ControlFlow.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Reaching-Definitions.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/bit-vectors.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/TF.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/CF.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Algorithm.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Live-Variables.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Unerstanding-Live-Variables.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Algorithm-LV.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Understanding-AE.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Algorithmi-AE.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-I/Analysis-Comparison.png">
-<meta property="article:published_time" content="2024-02-20T07:48:22.000Z">
-<meta property="article:modified_time" content="2024-02-23T08:53:04.013Z">
+<meta property="og:image" content="http://example.com/images/Live-Variable-Analysis-and-Iterative-Solver/LiveVariableAnalysis.png">
+<meta property="og:image" content="http://example.com/images/Live-Variable-Analysis-and-Iterative-Solver/meetInto.png">
+<meta property="og:image" content="http://example.com/images/Live-Variable-Analysis-and-Iterative-Solver/initializeBackward.png">
+<meta property="og:image" content="http://example.com/images/Live-Variable-Analysis-and-Iterative-Solver/doSolveBackward.png">
+<meta property="article:published_time" content="2024-02-23T12:47:27.000Z">
+<meta property="article:modified_time" content="2024-02-27T08:12:30.670Z">
 <meta property="article:author" content="Yao wenxiao">
-<meta property="article:tag" content="NJU">
+<meta property="article:tag" content="Tai-e">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/images/Data-Flow-Analysis-I/Input-Output.png">
+<meta name="twitter:image" content="http://example.com/images/Live-Variable-Analysis-and-Iterative-Solver/LiveVariableAnalysis.png">
   
   
   
-  <title>Data-Flow-Analysis( Application ) - Kevin&#39;s Blog</title>
+  <title>Live-Variable-Analysis-and-Iterative-Solver - Kevin&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -245,7 +235,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Data-Flow-Analysis( Application )"></span>
+            <span id="subtitle" data-typed-text="Live-Variable-Analysis-and-Iterative-Solver"></span>
           
         </div>
 
@@ -256,8 +246,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-20 15:48" pubdate>
-          February 20, 2024 pm
+        <time datetime="2024-02-23 20:47" pubdate>
+          February 23, 2024 pm
         </time>
       </span>
     
@@ -268,7 +258,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          891 words
+          1.2k words
         
       </span>
     
@@ -279,7 +269,7 @@
         
         
         
-          8 mins
+          10 mins
         
       </span>
     
@@ -324,140 +314,103 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Data-Flow-Analysis( Application )</h1>
+            <h1 id="seo-header">Live-Variable-Analysis-and-Iterative-Solver</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Overview-of-Data-Flow-Analysis"><a href="#Overview-of-Data-Flow-Analysis" class="headerlink" title="Overview of Data Flow Analysis"></a>Overview of Data Flow Analysis</h1><h2 id="1-Data-Flow-Analysis"><a href="#1-Data-Flow-Analysis" class="headerlink" title="1 - Data Flow Analysis"></a>1 - Data Flow Analysis</h2><p>Data Flow Analysis -&gt; How Data Flows on CFG<br>How <em>application-specific</em> Data( Abstraction ) <em>Flows</em>( Over-approximation ) through the <strong>Nodes</strong>( BB ) and <strong>Edges</strong>( control flows ) of CFG?</p>
-<h1 id="Preliminaries-of-Data-Flow-Analysis"><a href="#Preliminaries-of-Data-Flow-Analysis" class="headerlink" title="Preliminaries of Data Flow Analysis"></a>Preliminaries of Data Flow Analysis</h1><h2 id="1-Input-and-Output-States"><a href="#1-Input-and-Output-States" class="headerlink" title="1 - Input and Output States"></a>1 - Input and Output States</h2><ul>
-<li>Each execution of an IR statement transforms an input state to a new output state.</li>
-<li>The input( output ) state is associated with the program point before( after ) the statement.</li>
+                <h1 id="作业导览"><a href="#作业导览" class="headerlink" title="作业导览"></a>作业导览</h1><ul>
+<li>为 Java 实现一个活跃变量分析（Live Variable Analysis）。</li>
+<li>实现一个通用的迭代求解器（Iterative Solver），用于求解数据流分析问题，也就是本次作业中的活跃变量分析。</li>
 </ul>
-<img src="/images/Data-Flow-Analysis-I/Input-Output.png" srcset="/img/loading.gif" lazyload width=650>
+<h1 id="实现LiveVariableAnalysis中的API"><a href="#实现LiveVariableAnalysis中的API" class="headerlink" title="实现LiveVariableAnalysis中的API"></a>实现LiveVariableAnalysis中的API</h1><ul>
+<li><strong>SetFact newBoundaryFact(CFG)</strong></li>
+<li><strong>SetFact newInitialFact()</strong></li>
+<li><strong>void meetInto(SetFact,SetFact)</strong></li>
+<li><strong>boolean transferNode(Stmt,SetFact,SetFact)</strong></li>
+</ul>
+<img src="/images/Live-Variable-Analysis-and-Iterative-Solver/LiveVariableAnalysis.png" srcset="/img/loading.gif" lazyload width=400>
 
-<ul>
-<li><p>In each data-flow analysis application, we associate with every program point a <strong>data-flow value</strong> that represents and <em>abstraction</em> of the set of all possible <strong>program states</strong> that can be abserved foe that point.</p>
+<h2 id="1-newBoundaryFact-newInitialFact-CFG"><a href="#1-newBoundaryFact-newInitialFact-CFG" class="headerlink" title="1 - newBoundaryFact() &amp; newInitialFact(CFG)"></a>1 - newBoundaryFact() &amp; newInitialFact(CFG)</h2><p>由于是may分析，采用的是并运算符，且是正向传递的，所以每个BB的In都因该初始化为空。</p>
+<p>pascal.taie.analysis.dataflow.fact.SetFact<Var></p>
 <blockquote>
-<p>在数据流分析应用中，将每一个 program point 与一个 表示该点所有观测到的 program states 的集合的抽象的数据流值（data-flow value） 联系起来。</p>
-</blockquote>
-</li>
-<li><p>Data-flow analysis is to <strong>find a solution</strong> to a set of <em><strong>safe-approximation-directed constraints</strong></em> on the IN[s]’s and OUT[s]’s, for <em>all statements s.</em></p>
-<ul>
-<li>constraints based on semantics of statements( transfer functions ).</li>
-<li>constraints baesd on the flows of control.<blockquote>
-<p>数据流分析是对所有的语句，通过解析 safe-approximation 的约束规则，得到一个 solution（给每个 program point 一个 data-flow value）。</p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-Notations-for-Transfer-Function’s-Constraints"><a href="#2-Notations-for-Transfer-Function’s-Constraints" class="headerlink" title="2 - Notations for Transfer Function’s Constraints"></a>2 - Notations for Transfer Function’s Constraints</h2><p>Forward &amp; Backward</p>
-<img src="/images/Data-Flow-Analysis-I/Notations-Function.png" srcset="/img/loading.gif" lazyload width=480>
-
-<h2 id="3-Notations-for-Control-Flow’s-Constraints"><a href="#3-Notations-for-Control-Flow’s-Constraints" class="headerlink" title="3 - Notations for Control Flow’s Constraints"></a>3 - Notations for Control Flow’s Constraints</h2><p>Control flow within a BB &amp; Control flow among BBs</p>
-<img src="/images/Data-Flow-Analysis-I/Notations-ControlFlow.png" srcset="/img/loading.gif" lazyload width=550>
-
-<h1 id="Reaching-Definitions-Analysis-定义可达性分析"><a href="#Reaching-Definitions-Analysis-定义可达性分析" class="headerlink" title="Reaching Definitions Analysis( 定义可达性分析 )"></a><em>Reaching Definitions Analysis( 定义可达性分析 )</em></h1><h2 id="1-Reaching-Definitions"><a href="#1-Reaching-Definitions" class="headerlink" title="1 - Reaching Definitions"></a>1 - Reaching Definitions</h2><p>A definition d at program point p reaches a point q if there is a path from p to q such that d is not “killed” along that path.</p>
-<img src="/images/Data-Flow-Analysis-I/Reaching-Definitions.png" srcset="/img/loading.gif" lazyload width=350>
-
+<p>这个泛型类用于把 data fact 组织成一个集合。它提供了各种集合操作，如添加、删除元素，取交集、并集等。你同样需要阅读源码和注释来理解如何使用这个类表示活跃变量分析中的各种 data fact。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">add</span><span class="hljs-params">(E e)</span> &#123;<br>    <span class="hljs-keyword">return</span> set.add(e);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">remove</span><span class="hljs-params">(E e)</span> &#123;<br>    <span class="hljs-keyword">return</span> set.remove(e);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">union</span><span class="hljs-params">(SetFact&lt;E&gt; other)</span> &#123;<br>    <span class="hljs-keyword">return</span> set.addAll(other.set);<br>&#125;<br></code></pre></td></tr></table></figure>
 <blockquote>
 <ul>
-<li>A definition of a variable v is a statement that assigns a value to v.</li>
-<li>Translated as: definition of variable v at program point p reaches point q if there is a path from p to q such that <em><strong>no new definition of v</strong></em> appears on that path.</li>
+<li>Set中add方法可以向集合中添加单个元素。</li>
+<li>union使用数组工具类 Set 将参数 other 对象中的集合中的所有元素添加到当前对象的集合中，并返回添加操作是否成功的布尔值。</li>
 </ul>
 </blockquote>
-<h2 id="2-Understanding-Reaching-Definitions"><a href="#2-Understanding-Reaching-Definitions" class="headerlink" title="2 - Understanding Reaching Definitions"></a>2 - Understanding Reaching Definitions</h2><p>定义可达性可以用于侦测可能的未定义的变量。</p>
-<p>理解定义可达性分析：</p>
+</blockquote>
+<h2 id="2-meetInto-SetFact-SetFact"><a href="#2-meetInto-SetFact-SetFact" class="headerlink" title="2 - meetInto(SetFact,SetFact)"></a>2 - meetInto(SetFact,SetFact)</h2><ul>
+<li>该函数的功能就是将两个集合合并，所以直接采用union方法进行合并即可。</li>
+<li>每个SetFact<Var>包括了一个Var集合的类成员和若干操作集合的方法，每个 node ( 程序点 )的 IN&#x2F;OUT 都拥有一个 SetFact<Var>. 初始化时因为 LiveVariableAnalysis 都要初始化为空集，返回 new 的值即可。</li>
+</ul>
+<img src="/images/Live-Variable-Analysis-and-Iterative-Solver/meetInto.png" srcset="/img/loading.gif" lazyload width=550>
+
+<h2 id="3-transferNode-Stmt-SetFact-SetFact"><a href="#3-transferNode-Stmt-SetFact-SetFact" class="headerlink" title="3 - transferNode(Stmt,SetFact,SetFact)"></a>3 - transferNode(Stmt,SetFact,SetFact)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// out -&gt; newInfact</span><br>SetFact&lt;Var&gt; newInFact = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SetFact</span>&lt;&gt;();<br>newInFact.union(out);   <br><br><span class="hljs-comment">// outFact - def</span><br><span class="hljs-keyword">if</span> (stmt.getDef().isPresent()) &#123; <br>    <span class="hljs-type">LValue</span> <span class="hljs-variable">def</span> <span class="hljs-operator">=</span> stmt.getDef().get();<br>    <span class="hljs-keyword">if</span> (def <span class="hljs-keyword">instanceof</span> Var) &#123;<br>        newInFact.remove((Var) def);<br>    &#125;<br>&#125;<span class="hljs-comment">// 因为表达式左边也就是def，是一个Var，所以直接用Optional来表示。</span><br><br><span class="hljs-comment">// (outFact - def ) + use</span><br><span class="hljs-keyword">for</span> (RValue use : stmt.getUses()) &#123;<br>    <span class="hljs-keyword">if</span> (use <span class="hljs-keyword">instanceof</span>  Var) &#123;<br>        newInFact.add((Var) use);<br>    &#125;<br>&#125;<span class="hljs-comment">// 因为表达式右也就是use，是可能存在多个值的，所以直接用List来表示。</span><br></code></pre></td></tr></table></figure>
+
+<p>Java 8 Optional</p>
 <ul>
-<li><p>用一个比特表示某个变量在某一点的定义可达性。</p>
-</li>
-<li><p>用一个 n 维比特向量表示 n 个变量在某一点的定义可达性。</p>
-</li>
-<li><p>Data Flow Values&#x2F;Facts</p>
-<blockquote>
-<p>Represented by bit vectors  </p>
-<img src="/images/Data-Flow-Analysis-I/bit-vectors.png" srcset="/img/loading.gif" lazyload width=350>  </blockquote>
-</li>
-<li><p>Transfer Function</p>
-<blockquote>
-<img src="/images/Data-Flow-Analysis-I/TF.png" srcset="/img/loading.gif" lazyload width=350>  
-
-<blockquote>
-<p>genB就是B里面的definition,killB就是其他BB里面被覆盖掉的<br>definition。</p>
-</blockquote>
-</blockquote>
-</li>
-<li><p>Control Flow</p>
-<blockquote>
-<img src="/images/Data-Flow-Analysis-I/CF.png" srcset="/img/loading.gif" lazyload width=350></blockquote>
-</li>
+<li>Optional 类是一个可以为null的容器对象。<strong>如果值存在则isPresent()方法会返回true，调用get()方法会返回该对象。</strong></li>
+<li>Optional 是个容器：它可以保存类型T的值，或者仅仅保存null。Optional提供很多有用的方法，这样我们就不用显式进行空值检测。</li>
+<li>Optional 类的引入很好的解决空指针异常。</li>
 </ul>
-<h2 id="3-Algorithm-of-Reaching-Definitions-Analysis"><a href="#3-Algorithm-of-Reaching-Definitions-Analysis" class="headerlink" title="3 - Algorithm of Reaching Definitions Analysis"></a>3 - Algorithm of Reaching Definitions Analysis</h2><img src="/images/Data-Flow-Analysis-I/Algorithm.png" srcset="/img/loading.gif" lazyload width=500>
-
-<blockquote>
-<p>在算法模板中边界条件（OUT[entry]）单独初始化。<br>对于 OUT[B]，may analysis 一般初始化为空；must analysis 一般初始化为 top。</p>
-</blockquote>
-<h2 id="4-Why-this-iterative-algorithm-can-finally-stop"><a href="#4-Why-this-iterative-algorithm-can-finally-stop" class="headerlink" title="4 - Why this iterative algorithm can finally stop?"></a>4 - Why this iterative algorithm can finally stop?</h2><p>对于 Transfer Function，OUT[S] 只受 IN[S] 的影响，当个更多的 facts 流入 IN[S] 时，要么被 kill 要么存活下来并永远被保留，故 OUT[S] <strong>永远不会缩减（e.g. 0 &#x3D;&gt; 1 或 1 &#x3D;&gt; 1）</strong>，又因为定义的变量数量是有限的，故该迭代一定会停下来（实际上到达了一个不动点）</p>
-<blockquote>
-<p>Reach a fixed point also related with monotonicity( 单调性 )</p>
-</blockquote>
-<h1 id="Live-Variables-Analysis-活跃变量分析"><a href="#Live-Variables-Analysis-活跃变量分析" class="headerlink" title="Live Variables Analysis( 活跃变量分析 )"></a><em>Live Variables Analysis( 活跃变量分析 )</em></h1><h2 id="1-Live-Variables-Define"><a href="#1-Live-Variables-Define" class="headerlink" title="1 - Live Variables Define"></a>1 - Live Variables Define</h2><p>Live variables analysis tells whether the value of variable v at program point p could be used along some path in CFG starting at P. If so, v is live at p; otherwise, v is dead at p.</p>
-<img src="/images/Data-Flow-Analysis-I/Live-Variables.png" srcset="/img/loading.gif" lazyload width=500>
-
-<blockquote>
-<p>活跃变量信息可用于寄存器分配（倾向于使用存有 dead value 的寄存器来存新数据）</p>
-</blockquote>
-<h2 id="2-Understanding-Live-Variables-Analysis"><a href="#2-Understanding-Live-Variables-Analysis" class="headerlink" title="2 - Understanding Live Variables Analysis"></a>2 - Understanding Live Variables Analysis</h2><p>理解活跃变量分析：</p>
+<p>Java instanceof</p>
 <ul>
-<li>用一个比特表示某个变量在某一点是否活跃</li>
-<li>用一个 n 维比特向量表示 n 个变量在某一点是否活跃</li>
+<li>instanceof是Java中的二元运算符，<strong>左边是对象</strong>，<strong>右边是类</strong>；当对象是右边类或子类所创建对象时，返回true；否则，返回false。</li>
 </ul>
-<img src="/images/Data-Flow-Analysis-I/Unerstanding-Live-Variables.png" srcset="/img/loading.gif" lazyload width=650>
-
-<blockquote>
-<p>注意use的定义为：在重定义之前被使用。</p>
-</blockquote>
-<h2 id="3-Alogrithm-of-Live-Variables-Analysis"><a href="#3-Alogrithm-of-Live-Variables-Analysis" class="headerlink" title="3 - Alogrithm of Live Variables Analysis"></a>3 - Alogrithm of Live Variables Analysis</h2><img src="/images/Data-Flow-Analysis-I/Algorithm-LV.png" srcset="/img/loading.gif" lazyload width=650>
-
-<blockquote>
-<p>在算法模板中边界条件（IN[entry]）单独初始化<br>对于 IN[B]，may analysis 一般初始化为空；must analysis 一般初始化为 top</p>
-</blockquote>
-<h1 id="Available-Expressions-Analysis-可用表达式分析"><a href="#Available-Expressions-Analysis-可用表达式分析" class="headerlink" title="Available Expressions Analysis( 可用表达式分析 )"></a><em>Available Expressions Analysis( 可用表达式分析 )</em></h1><h2 id="1-Available-Expressions-Define"><a href="#1-Available-Expressions-Define" class="headerlink" title="1 - Available Expressions Define"></a>1 - Available Expressions Define</h2><p>An expression <strong>x op y</strong> is available at program point p if (1) all paths from th entry to p must pass through the evaluation of x op y, and (2) after the last evaluation of x op y, there is no redefinition of x or y.</p>
-<blockquote>
-<p>一个表达式，形如 x op y，在某个 program point p 是可用的，需要满足：</p>
+<p><em><strong>LValue &amp; RValue</strong></em><br>pascal.taie.ir.exp.Exp：是IR 中的一个关键接口，用于表示程序中的所有表达式。</p>
 <ul>
-<li>从 ENTRY 到 p 的所有路径都必须计算过 x op y 的值</li>
-<li>在这些路径各自最后一次计算该表达式的值之后没有修改过 x 或 y 的值</li>
-</ul>
-</blockquote>
-<h2 id="2-Understanding-Available-Expressions-Analysis"><a href="#2-Understanding-Available-Expressions-Analysis" class="headerlink" title="2 - Understanding Available Expressions Analysis"></a>2 - Understanding Available Expressions Analysis</h2><p>理解可用表达式分析：</p>
-<ul>
-<li>用一个比特表示某个表达式在某点是否可用</li>
-<li>用一个 n 维比特向量表示 n 个表达式在某点是否可用</li>
-<li>注意这是一个 must analysis</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-I/Understanding-AE.png" srcset="/img/loading.gif" lazyload width=650>
-
-<blockquote>
-<ul>
-<li>传递函数和控制流函数如果所示，经过一个BB块的运算，将kill掉包含被重定义过变量的表达式，并加入新的表达式。</li>
-<li>由于是must分析，所以控制流使用meet交集。</li>
-<li>（may分析是只要有某条路径可以就行，must分析是所有路径都要满足才行。may一般用于检测是否使用并删除未使用，must用于替换）</li>
-<li>must分析是一种safe并且under的approximation，即允许漏报的分析。看右下角例子，按照算法其实这个错了，第二个块由于x被重定义导致OUT应该变为空集的。如果由一种特殊情况，x被重定义为和原本一样的数值，那么这个表达式仍然是可以替换的，但是为了safe，算法还是把他排除了，这就是一种漏报，成为under-approximation。</li>
-</ul>
-</blockquote>
-<h2 id="3-Algorithm-of-Available-Expressions-Analysis"><a href="#3-Algorithm-of-Available-Expressions-Analysis" class="headerlink" title="3 - Algorithm of Available Expressions Analysis"></a>3 - Algorithm of Available Expressions Analysis</h2><img src="/images/Data-Flow-Analysis-I/Algorithmi-AE.png" srcset="/img/loading.gif" lazyload width=650>
-
-<h1 id="Analysis-Comparison"><a href="#Analysis-Comparison" class="headerlink" title="Analysis Comparison"></a>Analysis Comparison</h1><img src="/images/Data-Flow-Analysis-I/Analysis-Comparison.png" srcset="/img/loading.gif" lazyload width=650>
-
-<h1 id="The-X-You-Need-To-Understand-in-This-Lecture"><a href="#The-X-You-Need-To-Understand-in-This-Lecture" class="headerlink" title="The X You Need To Understand in This Lecture"></a>The X You Need To Understand in This Lecture</h1><ul>
-<li>Understand the three data flow analyses:<blockquote>
-<p>-reaching definitions<br>-live variables<br>-available expressions</p>
+<li>LValue:赋值语句左侧的表达式，如变量（x &#x3D; … ）、字段访问（x.f &#x3D; …）或数组访问（x[i] &#x3D; …）<blockquote>
+<p>从outFact中remove掉def，需要用到LValue，因为定义是在表达式的左边，而def只有一个，故用Optional表示。</p>
 </blockquote>
 </li>
-<li>Can tell the differences and similarities of the three data flow analyses</li>
-<li>Understand the iterative algorithm and cna tell why it is able to terminate</li>
+<li>RValue:赋值语句右侧的表达式，如数值字面量（… &#x3D; 1;）或二元表达式（… &#x3D; a + b;）<blockquote>
+<p>从outFact中remove掉use，需要用到RValue，因为引用变量( use 变量 )是在表达式的右边，而use可能不止一个，故用List来表示。</p>
+</blockquote>
+</li>
+</ul>
+<p>getDef() &amp; getUses()</p>
+<p>最后由于这个函数在伪代码中是需要判断前后值是否改变，且函数返回值的类型是boolean，所以需要添加判断语句。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (!newInFact.equals(in)) &#123;<br>    in.set(newInFact);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br><span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br></code></pre></td></tr></table></figure>
+
+<h1 id="实现迭代求解器"><a href="#实现迭代求解器" class="headerlink" title="实现迭代求解器"></a>实现迭代求解器</h1><ul>
+<li>Solver.initializeBackward(CFG,DataflowResult)</li>
+<li>IterativeSolver.doSolveBackward(CFG,DataflowResult)</li>
+</ul>
+<p>相关提示：</p>
+<blockquote>
+<p>每个 Solver 对象都在字段 analysis 中保存了相应的数据流分析对象，在本次作业中就是一个 LiveVariableAnalysis 对象。你需要用它提供的相关接口来实现分析求解器。</p>
+</blockquote>
+<h2 id="1-Solver-initializeBackward-CFG-DataflowResult"><a href="#1-Solver-initializeBackward-CFG-DataflowResult" class="headerlink" title="1 - Solver.initializeBackward(CFG,DataflowResult)"></a>1 - Solver.initializeBackward(CFG,DataflowResult)</h2><p>实现伪代码：</p>
+<img src="/images/Live-Variable-Analysis-and-Iterative-Solver/initializeBackward.png" srcset="/img/loading.gif" lazyload width=300>
+
+<p>DataflowResult:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> Fact <span class="hljs-title function_">getInFact</span><span class="hljs-params">(Node node)</span> &#123;<br>    <span class="hljs-keyword">return</span> inFacts.get(node);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setInFact</span><span class="hljs-params">(Node node, Fact fact)</span> &#123;<br>    inFacts.put(node, fact);<br>&#125;   <br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>该类对象用于维护数据流分析的 CFG 中的 fact。可以通过它的 API 获取( get )、设置( set ) CFG 节点( node )的 IN facts 和 OUT facts。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initializeBackward</span><span class="hljs-params">(CFG&lt;Node&gt; cfg, DataflowResult&lt;Node, Fact&gt; result)</span> &#123;<br>    analysis.newBoundaryFact(cfg);<br>    <span class="hljs-keyword">for</span> (Node node : cfg.getNodes())&#123;<br>        <span class="hljs-keyword">if</span> ( cfg.isExit(node) )&#123;<br>            <span class="hljs-keyword">continue</span>;<br>        &#125;<br>        result.setInFact(node, analysis.newInitialFact());<br>        result.setOutFact(node, analysis.newInitialFact());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>需要判断node是否到达exit( 末尾 )。</li>
+</ul>
+</blockquote>
+<h2 id="2-IterativeSolver-doSolveBackward-CFG-DataflowResult"><a href="#2-IterativeSolver-doSolveBackward-CFG-DataflowResult" class="headerlink" title="2 - IterativeSolver.doSolveBackward(CFG,DataflowResult)"></a>2 - IterativeSolver.doSolveBackward(CFG,DataflowResult)</h2><p>实现伪代码：</p>
+<img src="/images/Live-Variable-Analysis-and-Iterative-Solver/doSolveBackward.png" srcset="/img/loading.gif" lazyload width=300>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doSolveBackward</span><span class="hljs-params">(CFG&lt;Node&gt; cfg, DataflowResult&lt;Node, Fact&gt; result)</span> &#123;<br>    <span class="hljs-comment">// TODO - finish me</span><br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">changed</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">while</span> (changed) &#123;<br>        changed = <span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">for</span> (Node node : cfg.getNodes()) &#123;<br>            <span class="hljs-keyword">if</span> (cfg.isExit(node)) &#123;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125;<br>            <span class="hljs-keyword">for</span> (Node succNode : cfg.getSuccsOf(node)) &#123;<br>                analysis.meetInto(result.getInFact(succNode), result.getOutFact(node));<br>            &#125;<br>            <span class="hljs-keyword">if</span> (analysis.transferNode(node, result.getInFact(node), result.getOutFact(node))) &#123;<br>                changed = <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>pascal.taie.analysis.graph.cfg.CFG</p>
+<ul>
+<li><p>通过一个 for 循环遍历其中的所有节点:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">CFG&lt;Node&gt; cfg = ...;<br>    <span class="hljs-keyword">for</span> (Node node : cfg) &#123;<br>        ...<br>    &#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>通过 CFG.getPredsOf(Node) 和 CFG.getSuccsOf(Node) 这两个方法遍历 CFG 中节点的所有前驱和后继:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">for</span> (Node succ : cfg.getSuccsOf(node)) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
 
                 
@@ -477,7 +430,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Static-Analysis/" class="category-chain-item">Static Analysis</a>
+  <a href="/categories/Static-Analysis-Programming-Assignments/" class="category-chain-item">Static Analysis Programming Assignments</a>
   
   
 
@@ -492,7 +445,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/NJU/" class="print-no-link">#NJU</a>
+        <a href="/tags/Tai-e/" class="print-no-link">#Tai-e</a>
       
     </div>
   
@@ -504,8 +457,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Data-Flow-Analysis( Application )</div>
-      <div>http://example.com/2024/02/20/Data-Flow-Analysis-I/</div>
+      <div>Live-Variable-Analysis-and-Iterative-Solver</div>
+      <div>http://example.com/2024/02/23/Live-Variable-Analysis-and-Iterative-Solver/</div>
     </div>
     <div class="license-meta">
       
@@ -517,7 +470,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>February 20, 2024</div>
+          <div>February 23, 2024</div>
         </div>
       
       
@@ -549,9 +502,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/23/Live-Variable-Analysis-and-Iterative-Solver/" title="Live-Variable-Analysis-and-Iterative-Solver">
+                      <a href="/2024/02/26/Database-System-Chapter-1/" title="Database-System-Chapter-1">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Live-Variable-Analysis-and-Iterative-Solver</span>
+                        <span class="hidden-mobile">Database-System-Chapter-1</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -559,8 +512,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/19/Intermediate-Representation/" title="Intermediate-Representation">
-                        <span class="hidden-mobile">Intermediate-Representation</span>
+                      <a href="/2024/02/20/Data-Flow-Analysis-I/" title="Data-Flow-Analysis( Application )">
+                        <span class="hidden-mobile">Data-Flow-Analysis( Application )</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
