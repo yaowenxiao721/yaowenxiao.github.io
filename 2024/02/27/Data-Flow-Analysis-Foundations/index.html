@@ -16,27 +16,35 @@
   <meta name="author" content="Yao wenxiao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1 - 数据库系统概述数据库的4个基本概念 Data( 数据 ) *recode( 记录 )*：数据是有结构的，记录是计算机存储数据的一种格式或一种方法。 日常生活中人们可以直接用自然语言来描述事物，而在计算机中常常用记录+语义来描述。   Database( 数据库 ) 是长期储存在计算机内、有组织的、可共享的大量数据的集合。   DataBase Management System( 数据库管">
+    <meta name="description" content="1 - Iterative Algorithm, Another View 假设给定的 CFG 有 k 个节点，迭代算法每次迭代更新每个节点的 OUT[n] 定义 k-tuple (OUT[n1], … , OUT[nk])，则该元组为集合 V^k 的一个元素（V 是数据流分析的值的域） 那么每次迭代可以视作作用了转移函数和流控制处理的一次映射，即：F: V^k —&gt; V^k 整个算法就是在">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Database System Chapter 1">
-<meta property="og:url" content="http://example.com/2024/02/26/Database-System-Chapter-1/index.html">
+<meta property="og:title" content="Data Flow Analysis( Foundations )">
+<meta property="og:url" content="http://example.com/2024/02/27/Data-Flow-Analysis-Foundations/index.html">
 <meta property="og:site_name" content="Kevin&#39;s Blog">
-<meta property="og:description" content="1 - 数据库系统概述数据库的4个基本概念 Data( 数据 ) *recode( 记录 )*：数据是有结构的，记录是计算机存储数据的一种格式或一种方法。 日常生活中人们可以直接用自然语言来描述事物，而在计算机中常常用记录+语义来描述。   Database( 数据库 ) 是长期储存在计算机内、有组织的、可共享的大量数据的集合。   DataBase Management System( 数据库管">
+<meta property="og:description" content="1 - Iterative Algorithm, Another View 假设给定的 CFG 有 k 个节点，迭代算法每次迭代更新每个节点的 OUT[n] 定义 k-tuple (OUT[n1], … , OUT[nk])，则该元组为集合 V^k 的一个元素（V 是数据流分析的值的域） 那么每次迭代可以视作作用了转移函数和流控制处理的一次映射，即：F: V^k —&gt; V^k 整个算法就是在">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/Database-System-Chapter-1/DBMS.png">
-<meta property="og:image" content="http://example.com/images/Database-System-Chapter-1/share.png">
-<meta property="og:image" content="http://example.com/images/Database-System-Chapter-1/E-R.png">
-<meta property="og:image" content="http://example.com/images/Database-System-Chapter-1/%E4%B8%89%E7%BA%A7%E6%A8%A1%E5%BC%8F.png">
-<meta property="article:published_time" content="2024-02-26T12:10:42.000Z">
-<meta property="article:modified_time" content="2024-02-28T02:43:30.115Z">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Another-View.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Partial-Order.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/ul-bound.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/least-ul-bound.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/lattice.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/semilattice.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/complete-lattice.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/product-lattice.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/fixed-point.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/relate.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/May-Must-Analysis.png">
+<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/MOP.png">
+<meta property="article:published_time" content="2024-02-27T11:21:01.000Z">
+<meta property="article:modified_time" content="2024-02-28T07:01:43.947Z">
 <meta property="article:author" content="Yao wenxiao">
-<meta property="article:tag" content="NJUPT">
+<meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/images/Database-System-Chapter-1/DBMS.png">
+<meta name="twitter:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Another-View.png">
   
   
   
-  <title>Database System Chapter 1 - Kevin&#39;s Blog</title>
+  <title>Data Flow Analysis( Foundations ) - Kevin&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -235,7 +243,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Database System Chapter 1"></span>
+            <span id="subtitle" data-typed-text="Data Flow Analysis( Foundations )"></span>
           
         </div>
 
@@ -246,8 +254,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-26 20:10" pubdate>
-          February 26, 2024 pm
+        <time datetime="2024-02-27 19:21" pubdate>
+          February 27, 2024 pm
         </time>
       </span>
     
@@ -258,7 +266,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          815 words
+          949 words
         
       </span>
     
@@ -269,7 +277,7 @@
         
         
         
-          7 mins
+          8 mins
         
       </span>
     
@@ -314,116 +322,121 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Database System Chapter 1</h1>
+            <h1 id="seo-header">Data Flow Analysis( Foundations )</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="1-数据库系统概述"><a href="#1-数据库系统概述" class="headerlink" title="1 - 数据库系统概述"></a>1 - 数据库系统概述</h1><h2 id="数据库的4个基本概念"><a href="#数据库的4个基本概念" class="headerlink" title="数据库的4个基本概念"></a>数据库的4个基本概念</h2><ul>
-<li>Data( 数据 )<blockquote>
-<p>*recode( 记录 )*：<strong>数据是有结构的</strong>，记录是计算机存储数据的一种格式或一种方法。 日常生活中人们可以直接用自然语言来描述事物，而在计算机中常常用记录+语义来描述。</p>
+                <h1 id="1-Iterative-Algorithm-Another-View"><a href="#1-Iterative-Algorithm-Another-View" class="headerlink" title="1 - Iterative Algorithm, Another View"></a>1 - Iterative Algorithm, Another View</h1><ul>
+<li>假设给定的 CFG 有 k 个节点，迭代算法每次迭代更新每个节点的 OUT[n]</li>
+<li>定义 k-tuple (OUT[n1], … , OUT[nk])，则该元组为集合 V^k 的一个元素（V 是数据流分析的值的域）</li>
+<li>那么每次迭代可以视作作用了转移函数和流控制处理的一次映射，即：F: V^k —&gt; V^k</li>
+<li>整个算法就是在不断地输出这样的 k-tuple 直到出现连续两个相同的为止</li>
+</ul>
+<img src="/images/Data-Flow-Analysis-Foundations/Another-View.png" srcset="/img/loading.gif" lazyload>
+
+<blockquote>
+<p>迭代算法会在 X &#x3D; F(X) 处停下来，即数学定义上的一个不动点（fixed point）</p>
 </blockquote>
-</li>
-<li>Database( 数据库 )<blockquote>
-<p>是长期储存在计算机内、有组织的、可共享的大量数据的集合。</p>
-</blockquote>
-</li>
-<li>DataBase Management System( 数据库管理系统 )<blockquote>
+<p>Think:</p>
 <ul>
-<li>位于用户应用与操作系统之间的一层数据管理软件。</li>
-<li>是基础软件，是一个大型复杂的软件系统。<img src="/images/Database-System-Chapter-1/DBMS.png" srcset="/img/loading.gif" lazyload width=120></li>
+<li>Is the algorithm guaranteed to terminate or reach the fixed point, or does it always have a solution?</li>
+<li>If so, is there only one solution or only one fixed point? If more than one, is our solution the best one (most precise)?</li>
+<li>When will the algorithm reach the fixed point, or when can we get the solution? (时间复杂度)</li>
 </ul>
-</blockquote>
-</li>
-<li>DataBase System( 数据库系统 )<blockquote>
-<p>是指在计算机系统中引入数据库后的系统构成(对数据进行存储、管理、处理和维护的系统)</p>
-</blockquote>
-</li>
+<h1 id="2-Partial-Order"><a href="#2-Partial-Order" class="headerlink" title="2- Partial Order"></a>2- Partial Order</h1><ul>
+<li>偏序关系（Partial Order）满足<strong>自反性</strong>、<strong>反对称性</strong>、<strong>传递性</strong>。</li>
+<li>一个偏序集（poset）中的任意两个元素之间不一定满足偏序关系</li>
 </ul>
-<h2 id="DBMS-的功能："><a href="#DBMS-的功能：" class="headerlink" title="DBMS 的功能："></a>DBMS 的功能：</h2><ul>
-<li>数据定义、组织、存储和管理、操纵</li>
-<li>数据库的事务管理和运行管理（安全性、完整性、并发控制、恢复）</li>
-<li>数据库的建立和维护</li>
-</ul>
-<h2 id="数据库系统的特点"><a href="#数据库系统的特点" class="headerlink" title="数据库系统的特点"></a>数据库系统的特点</h2><ul>
-<li>数据结构化<blockquote>
-<p>数据的<strong>整体</strong>结构化是数据库的主要特征之一</p>
+<img src="/images/Data-Flow-Analysis-Foundations/Partial-Order.png" srcset="/img/loading.gif" lazyload width=550>
+
+<h1 id="3-Upper-and-Lower-Bounds"><a href="#3-Upper-and-Lower-Bounds" class="headerlink" title="3 - Upper and Lower Bounds"></a>3 - Upper and Lower Bounds</h1><p>上界（upper bound）和下界（lower bound）<br><img src="/images/Data-Flow-Analysis-Foundations/ul-bound.png" srcset="/img/loading.gif" lazyload width=450></p>
+<p>最小上界（least upper bound）和最大下界（greatest lower bound）<br><img src="/images/Data-Flow-Analysis-Foundations/least-ul-bound.png" srcset="/img/loading.gif" lazyload width=500></p>
+<blockquote>
+<p>不是每个偏序集都有最小上界（最大下界）；若偏序集存在最小上界（最大下界），则是唯一的</p>
 </blockquote>
-</li>
-<li>数据的共享性高，冗余度低且易扩充<blockquote>
-<p>数据面向整个系统，可以被多个用户、多个应用共享使用。<br><img src="/images/Database-System-Chapter-1/share.png" srcset="/img/loading.gif" lazyload width=400></p>
-</blockquote>
-</li>
-<li>数据独立性强<blockquote>
-<p>数据独立性由数据库管理系统的二级映像功能来保证</p>
-</blockquote>
-</li>
-<li>数据由数据库管理系统统一管理和控制<blockquote>
-<ul>
-<li>数据的安全性（Security）保护</li>
-<li>数据的完整性（Integrity）检查</li>
-<li>并发控制（Concurrency Control）</li>
-<li>数据库恢复（Recovery）</li>
+<h1 id="4-Lattice-Semilattice-Complete-and-Product-Lattice"><a href="#4-Lattice-Semilattice-Complete-and-Product-Lattice" class="headerlink" title="4 - Lattice, Semilattice, Complete and Product Lattice"></a>4 - Lattice, Semilattice, Complete and Product Lattice</h1><ul>
+<li>格（Lattice）</li>
 </ul>
-</blockquote>
-</li>
-</ul>
-<h1 id="2-数据模型"><a href="#2-数据模型" class="headerlink" title="2 - 数据模型"></a>2 - 数据模型</h1><p>数据模型是对现实世界数据特征的抽象</p>
-<p><strong>数据模型的组成要素</strong>：</p>
-<ul>
-<li><p>数据结构–描述系统的静态特性</p>
-</li>
-<li><p>数据操作–描述系统的动态特性</p>
-</li>
-<li><p>完整性约束–给定的数据模型中数据及其联系所具有的制约和<br>依存规则。</p>
-</li>
-<li><p>概念模型：<br>实体-联系方法（Entity-Relationship Approach）（E-T模型）：</p>
-</li>
-</ul>
-<img src="/images/Database-System-Chapter-1/E-R.png" srcset="/img/loading.gif" lazyload width=500>
+<img src="/images/Data-Flow-Analysis-Foundations/lattice.png" srcset="/img/loading.gif" lazyload width=500>
 
 <ul>
-<li><p><strong>逻辑模型</strong>：</p>
+<li>半格（Semilattice）</li>
+</ul>
+<img src="/images/Data-Flow-Analysis-Foundations/semilattice.png" srcset="/img/loading.gif" lazyload width=500>
+
+<ul>
+<li>全格（Complete Lattice）</li>
+</ul>
+<img src="/images/Data-Flow-Analysis-Foundations/complete-lattice.png" srcset="/img/loading.gif" lazyload width=500>
+
 <blockquote>
-<p>层次结构-层次模型、网状结构–网状模型、关系结构—关系模型</p>
+<p>Every <strong>finite</strong> lattice (P is finite) is a complete lattice. ( 有穷格一定是全格，全格不一定是有穷格 )</p>
 </blockquote>
-</li>
-<li><p>物理模型</p>
-</li>
+<ul>
+<li>格的积（Product Lattice）</li>
 </ul>
-<h1 id="3-数据库系统的结构"><a href="#3-数据库系统的结构" class="headerlink" title="3 - 数据库系统的结构"></a>3 - 数据库系统的结构</h1><ul>
-<li>模式（Schema）<blockquote>
-<p>是对数据库逻辑结构和特征的描述<br>是型的描述，不涉及具体值<br>模式是相对稳定的</p>
-</blockquote>
-</li>
-<li>实例（Instance）<blockquote>
-<p>数据库某一时刻的状态——模式的一个具体值<br>同一个模式可以有很多实例<br>n实例随数据库中的数据的更新而变动</p>
-</blockquote>
-</li>
-</ul>
-<p>数据库系统的三级模式结构:</p>
-<img src="/images/Database-System-Chapter-1/三级模式.png" srcset="/img/loading.gif" lazyload width=600>
+<img src="/images/Data-Flow-Analysis-Foundations/product-lattice.png" srcset="/img/loading.gif" lazyload width=500>
 
 <blockquote>
 <ul>
-<li>外模式（也称子模式或用户模式）</li>
-<li>模式（逻辑模式）</li>
-<li>内模式（也称存储模式）（一个数据库只有一个内模式）</li>
+<li>A product lattice is a lattice.</li>
+<li>If a product lattice L is a product of complete lattices, then L is also complete.</li>
 </ul>
 </blockquote>
-<p>数据库的二级映像功能</p>
+<h1 id="5-Data-Flow-Analysis-Framework-via-Lattice"><a href="#5-Data-Flow-Analysis-Framework-via-Lattice" class="headerlink" title="5 - Data Flow Analysis Framework via Lattice"></a>5 - Data Flow Analysis Framework via Lattice</h1><p>A data flow analysis framework (D, L, F) consists of:</p>
 <ul>
-<li>外模式／模式映像</li>
-<li>模式／内模式映像<blockquote>
-<p>数据独立性（物理独立性、逻辑独立性）由数据库管理系统的二级映像功能来保证。</p>
-<ul>
-<li>物理独立性是指用户的应用程序与存储在磁盘上的数据库中数据是相互独立的。</li>
-<li>逻辑独立性是指用户的应用程序与数据库的逻辑结构是相互独立的。</li>
-</ul>
+<li>D: a direction of data flow: forwards or backwards.</li>
+<li>L: a lattice including domain of the values V and a meet ∩ or join ∪ operator.</li>
+<li>F: a family of transfer functions from V to V.<blockquote>
+<p>Data flow analysis can be seen as iteratively applying transfer functions and meet&#x2F;join operations on the values of a lattice.</p>
 </blockquote>
 </li>
 </ul>
-<h1 id="4-数据库系统的组成（略）"><a href="#4-数据库系统的组成（略）" class="headerlink" title="4 - 数据库系统的组成（略）"></a>4 - 数据库系统的组成（略）</h1>
+<h1 id="6-Monotonicity-and-Fixed-Point-Theorem"><a href="#6-Monotonicity-and-Fixed-Point-Theorem" class="headerlink" title="6 - Monotonicity and Fixed Point Theorem"></a>6 - Monotonicity and Fixed Point Theorem</h1><h2 id="Monotonicity-Define："><a href="#Monotonicity-Define：" class="headerlink" title="Monotonicity Define："></a>Monotonicity Define：</h2><p>一个函数f: L → L (L为lattice)是单调的，当且仅当∀x, y ∈ L,x ⊑ y ⟹ f(x) ⊑ f(y)。</p>
+<h2 id="Fixed-Point-Theorem"><a href="#Fixed-Point-Theorem" class="headerlink" title="Fixed Point Theorem"></a>Fixed Point Theorem</h2><img src="/images/Data-Flow-Analysis-Foundations/fixed-point.png" srcset="/img/loading.gif" lazyload width=500>
+
+<p>Let’s prove</p>
+<ul>
+<li>Existence of fixed point.</li>
+<li>The fixed point is the least.</li>
+</ul>
+<h1 id="7-Relate-Iteraive-Algorithm-to-Fixed-Point-Theorem"><a href="#7-Relate-Iteraive-Algorithm-to-Fixed-Point-Theorem" class="headerlink" title="7 - Relate Iteraive Algorithm to Fixed Point Theorem"></a>7 - Relate Iteraive Algorithm to Fixed Point Theorem</h1><img src="/images/Data-Flow-Analysis-Foundations/relate.png" srcset="/img/loading.gif" lazyload width=500>
+
+<h1 id="8-May-Must-Analysis-A-Lattice-View"><a href="#8-May-Must-Analysis-A-Lattice-View" class="headerlink" title="8 - May&#x2F;Must Analysis, A Lattice View"></a><em>8 - May&#x2F;Must Analysis, A Lattice View</em></h1><img src="/images/Data-Flow-Analysis-Foundations/May-Must-Analysis.png" srcset="/img/loading.gif" lazyload width=550>
+
+<blockquote>
+<ul>
+<li>may分析的目的可以看作是报错，因此初始化在bottom，此时分析结果为无错误，因此肯定是一个unsafe的结果；而在top处，分析结果是所有点都出错的，这个肯定是safe的，但是就有些是做了无用功了；因此我们的目的是在二者之间找到一个平衡点，假设{a,c}是truth，那么以此为界可以划分为两块(之所以是区域是因为这其实是一个product lattice)，交界点便是truth。</li>
+<li>must的目的可以看作是删除优化，因此初始化在top，此时分析结果为所有语句都可删除，那肯定是unsafe的，其余类比may可得。</li>
+<li>会发现may分析是查错用的，所以必须都是1才安全，而must是优化用的，所以都是0才最安全，无论是MUST还&gt;是MAY，都是从Unsafe往Safe方向走，达到第一个不动点。</li>
+<li>就是用之前 {a, b, c} 的图来理解，现在有一个 {a} 和 一个 {b}，它们固然可以走到 {a, b, c}，但是它们的 join 是 {a, b}</li>
+<li>图中所有不动点都是safe的，其实是看算法设计情况，如果由不动点在unsafe区域，那么这个算法就是不合格的。</li>
+</ul>
+</blockquote>
+<h1 id="9-Distributivity-and-MOP"><a href="#9-Distributivity-and-MOP" class="headerlink" title="9 - Distributivity and MOP"></a>9 - Distributivity and MOP</h1><ul>
+<li>Meet-Over-All-Paths Solution (MOP)</li>
+</ul>
+<blockquote>
+<p>与之前使用的算法不同，我们以前使用的算法是在运行过程中沿着数据流反复迭代的，而MOP是找出从开头到结尾所有路径，分别进行传递函数计算，最后将算完的所有路径进行⊔&#x2F;⊓</p>
+</blockquote>
+<img src="/images/Data-Flow-Analysis-Foundations/MOP.png" srcset="/img/loading.gif" lazyload width=500>
+
+<blockquote>
+<p>由于某些路径可能实际无法到达，因此MOP不是特别精确；而在正常的程序中路径过多，几乎无法全部枚举，因此MOP也不太实际。</p>
+</blockquote>
+<ul>
+<li>Iterative Algorithm vs. MOP<blockquote>
+<p>iterative algorithm: F(x ∪ y)<br>MOP: F(X) ∪ F(y)</p>
+</blockquote>
+</li>
+</ul>
+<p>经过证明MOP ⊑ Ours满足偏序关系，根据之前的图，对于may analyses，MOP更加接近truth因此更加精确。<br>同理，对于must analyses，有Ours ⊑ MOP，根据之前的图，MOP接近truth，更加精准。<br>只要满足了转换函数是distributive的条件，我们的方法就和MOP一样精准，上一篇文章中提到的三个算法都是distributive，下面将一个不是distributive的算法。</p>
+<h1 id="10-Constant-Propagation"><a href="#10-Constant-Propagation" class="headerlink" title="10 - Constant Propagation"></a>10 - Constant Propagation</h1><h2 id="Define"><a href="#Define" class="headerlink" title="Define"></a>Define</h2><p>Given a variable x at program point p, determine whether x is guaranteed to hold a constant value at p.</p>
+<ul>
+<li>The OUT of each node in CFG, includes a set of pairs (x, v) where x is a variable and v is the value held by x after that node.</li>
+</ul>
+<h1 id="11-Worklist-Algorithm"><a href="#11-Worklist-Algorithm" class="headerlink" title="11 - Worklist Algorithm"></a>11 - Worklist Algorithm</h1>
                 
               </div>
             
@@ -441,7 +454,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Database-System/" class="category-chain-item">Database System</a>
+  <a href="/categories/Static-Analysis/" class="category-chain-item">Static Analysis</a>
   
   
 
@@ -456,7 +469,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/NJUPT/" class="print-no-link">#NJUPT</a>
+        <a href="/tags/NJU/" class="print-no-link">#NJU</a>
       
     </div>
   
@@ -468,8 +481,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Database System Chapter 1</div>
-      <div>http://example.com/2024/02/26/Database-System-Chapter-1/</div>
+      <div>Data Flow Analysis( Foundations )</div>
+      <div>http://example.com/2024/02/27/Data-Flow-Analysis-Foundations/</div>
     </div>
     <div class="license-meta">
       
@@ -481,7 +494,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>February 26, 2024</div>
+          <div>February 27, 2024</div>
         </div>
       
       
@@ -513,9 +526,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/27/Data-Flow-Analysis-Foundations/" title="Data Flow Analysis( Foundations )">
+                      <a href="/2024/02/28/Constan-Propagation-and-Worklist-Solver/" title="Constan Propagation and Worklist Solver">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Data Flow Analysis( Foundations )</span>
+                        <span class="hidden-mobile">Constan Propagation and Worklist Solver</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -523,8 +536,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/23/Live-Variable-Analysis-and-Iterative-Solver/" title="Live Variable Analysis and Iterative Solver">
-                        <span class="hidden-mobile">Live Variable Analysis and Iterative Solver</span>
+                      <a href="/2024/02/26/Database-System-Chapter-1/" title="Database System Chapter 1">
+                        <span class="hidden-mobile">Database System Chapter 1</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
