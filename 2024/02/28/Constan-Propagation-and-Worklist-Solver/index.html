@@ -16,18 +16,23 @@
   <meta name="author" content="Yao wenxiao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="作业导览 为 Java 实现常量传播算法。 实现一个通用的 worklist 求解器，并用它来解决一些数据流分析问题，例如本次的常量传播。">
+    <meta name="description" content="作业导览 为 Java 实现常量传播算法。 实现一个通用的 worklist 求解器，并用它来解决一些数据流分析问题，例如本次的常量传播。  实现ConstantPropagation中的API： CPFact newBoundaryFact(CFG) CPFact newInitialFact() void meetInto(CPFact, CPFact) Value meetValue(Val">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Constan Propagation and Worklist Solver">
 <meta property="og:url" content="http://example.com/2024/02/28/Constan-Propagation-and-Worklist-Solver/index.html">
 <meta property="og:site_name" content="Kevin&#39;s Blog">
-<meta property="og:description" content="作业导览 为 Java 实现常量传播算法。 实现一个通用的 worklist 求解器，并用它来解决一些数据流分析问题，例如本次的常量传播。">
+<meta property="og:description" content="作业导览 为 Java 实现常量传播算法。 实现一个通用的 worklist 求解器，并用它来解决一些数据流分析问题，例如本次的常量传播。  实现ConstantPropagation中的API： CPFact newBoundaryFact(CFG) CPFact newInitialFact() void meetInto(CPFact, CPFact) Value meetValue(Val">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Constan-Propagation-and-Worklist-Solver/meet.png">
+<meta property="og:image" content="http://example.com/images/Constan-Propagation-and-Worklist-Solver/transfer-function1.png">
+<meta property="og:image" content="http://example.com/images/Constan-Propagation-and-Worklist-Solver/exp.png">
+<meta property="og:image" content="http://example.com/images/Constan-Propagation-and-Worklist-Solver/transfer-function2.png">
 <meta property="article:published_time" content="2024-02-28T02:42:20.000Z">
-<meta property="article:modified_time" content="2024-02-28T02:45:16.778Z">
+<meta property="article:modified_time" content="2024-03-04T08:47:29.548Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="Tai-e">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/Constan-Propagation-and-Worklist-Solver/meet.png">
   
   
   
@@ -253,7 +258,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          49 words
+          1.4k words
         
       </span>
     
@@ -264,7 +269,7 @@
         
         
         
-          1 mins
+          12 mins
         
       </span>
     
@@ -318,7 +323,143 @@
 <li>为 Java 实现常量传播算法。</li>
 <li>实现一个通用的 worklist 求解器，并用它来解决一些数据流分析问题，例如本次的常量传播。</li>
 </ul>
+<h1 id="实现ConstantPropagation中的API："><a href="#实现ConstantPropagation中的API：" class="headerlink" title="实现ConstantPropagation中的API："></a>实现ConstantPropagation中的API：</h1><ul>
+<li><strong>CPFact newBoundaryFact(CFG)</strong></li>
+<li><strong>CPFact newInitialFact()</strong></li>
+<li><strong>void meetInto(CPFact, CPFact)</strong></li>
+<li>Value meetValue(Value, Value)</li>
+<li><strong>boolean transferNode(Stmt, CPFact, CPFact)</strong></li>
+<li>Value evaluate(Exp, CPFact)</li>
+</ul>
+<blockquote>
+<p>本次作业只关注 int 类型的常量传播。为了实现这一点，框架代码在 ConstantPropagation 类中提供了 <strong>canHoldInt(Var)</strong> 方法来判断一个变量能否储存 int 类型的值。你需要利用这个方法来判断一个变量是否在本次作业的分析范围内，并忽略那些不在范围内的变量（例如 float 类型的变量）。</p>
+</blockquote>
+<h2 id="1-CPFact-newBoundaryFact-CFG"><a href="#1-CPFact-newBoundaryFact-CFG" class="headerlink" title="1 - CPFact newBoundaryFact(CFG)"></a>1 - CPFact newBoundaryFact(CFG)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> CPFact <span class="hljs-title function_">newBoundaryFact</span><span class="hljs-params">(CFG&lt;Stmt&gt; cfg)</span> &#123;<br>    <span class="hljs-comment">// TODO - finish me</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>pascal.taie.analysis.dataflow.analysis.constprop.CPFact<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CPFact</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">MapFact</span>&lt;Var, Value&gt; &#123;&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>这个类表示常量传播中的 data facts，即一个从变量（Var）到格上抽象值（Value）的映射。该类提供了各种 map 相关的操作，例如键值对的查询、更新等等。这些操作大多继承自 <strong>pascal.taie.analysis.dataflow.fact.MapFact</strong>。</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">update</span><span class="hljs-params">(Var key, Value value)</span> &#123;<br>    <span class="hljs-keyword">if</span> (value.isUndef()) &#123;<br>        <span class="hljs-comment">// if the client code sets variable key to UNDEF,</span><br>        <span class="hljs-comment">// then we remove the variable from the CPFact</span><br>        <span class="hljs-comment">// as we use absence to represent UNDEF.</span><br>        <span class="hljs-keyword">return</span> remove(key) != <span class="hljs-literal">null</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">super</span>.update(key, value);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>这个函数用来更新CPFact，也就是给CPFact赋值。</p>
+</blockquote>
+<ul>
+<li>pascal.taie.ir.*</li>
+</ul>
+<p>pascal.taie.ir.IR</p>
+<blockquote>
+<p>这是 Tai-e 的 IR 的核心数据结构。它的每个实例储存了一个 Java 方法的各种信息，例如变量、参数、语句等等。</p>
+</blockquote>
+<p>pascal.taie.ir.exp.Var</p>
+<blockquote>
+<p>这个类代表 IR 中的变量。</p>
+</blockquote>
+<p>综上可得：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> CPFact <span class="hljs-title function_">newBoundaryFact</span><span class="hljs-params">(CFG&lt;Stmt&gt; cfg)</span> &#123;<br>    <span class="hljs-comment">// TODO - finish me</span><br>    <span class="hljs-type">CPFact</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CPFact</span>();<br>    <span class="hljs-keyword">for</span> ( Var <span class="hljs-keyword">var</span> : cfg.getIR().getParams() ) &#123;<br>        result.update(<span class="hljs-keyword">var</span>, Value.getNAC());<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<h2 id="2-CPFact-newInitialFact"><a href="#2-CPFact-newInitialFact" class="headerlink" title="2 - CPFact newInitialFact()"></a>2 - CPFact newInitialFact()</h2><p>这个相对简单，目的是创建一个CPFact，所以之久使用 new CPFact()，即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> CPFact <span class="hljs-title function_">newInitialFact</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// TODO - finish me</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CPFact</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-void-meetInto-CPFact-CPFact"><a href="#3-void-meetInto-CPFact-CPFact" class="headerlink" title="3 - void meetInto(CPFact, CPFact)"></a>3 - void meetInto(CPFact, CPFact)</h2><p>Value meetValue(Value, Value)对应着格上的 meet 操作（⊓，应当在 meetInto() 方法中调用它。</p>
+<img src="/images/Constan-Propagation-and-Worklist-Solver/meet.png" srcset="/img/loading.gif" lazyload width=600>
+
+<blockquote>
+<p>也就是下面这四种情况：<br>NAC ^ v &#x3D; NAC<br>UNDEF ^ v &#x3D; v<br>c ^ c &#x3D; c<br>c1 ^ c2 &#x3D; NAC</p>
+</blockquote>
+<p>pascal.taie.analysis.dataflow.analysis.constprop.Value</p>
+<blockquote>
+<p>这个类表示了常量分析中格上的抽象值 (见第 6 讲课件的第 238 页)。它的代码和注释解释了它的用法。你应该用下列的静态方法获取格上抽象值（即该类的实例）：</p>
+</blockquote>
+<p>Value getNAC(): 返回 NAC<br>Value getUndef(): 返回 UNDEF<br>Value makeConstant(int): 返回给定整数在格上对应的抽象值</p>
+<p>根据图中的逻辑关系可得：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> Value <span class="hljs-title function_">meetValue</span><span class="hljs-params">(Value v1, Value v2)</span> &#123;<br>    <span class="hljs-comment">// TODO - finish me</span><br>    <span class="hljs-keyword">if</span>(v1.isNAC() || v2.isNAC()) &#123;<br>        <span class="hljs-keyword">return</span> Value.getNAC();<br>    &#125;<br>    <span class="hljs-keyword">if</span>(v1.isConstant() &amp;&amp; v2.isConstant())&#123;<br>        <span class="hljs-keyword">if</span>(v1.getConstant() != v2.getConstant()) &#123;<br>            <span class="hljs-keyword">return</span> Value.getNAC();<br>        &#125;<span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">return</span> Value.makeConstant(v1.getConstant());<br>        &#125;<br>    &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(v1.isConstant())&#123;<br>        <span class="hljs-keyword">return</span> Value.makeConstant(v1.getConstant());<br>    &#125;<span class="hljs-keyword">else</span>&#123;<br>        <span class="hljs-keyword">return</span> Value.makeConstant(v2.getConstant());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>void meetInto(CPFact, CPFact)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">meetInto</span><span class="hljs-params">(CPFact fact, CPFact target)</span> &#123;<br>    <span class="hljs-comment">//TODO - finish me</span><br>    <span class="hljs-comment">//对于fact里面的每一个键值对，通过合并来更新。</span><br>    fact.entries().forEach(entry -&gt; &#123;<br>        <span class="hljs-type">Var</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> entry.getKey();<br>        <span class="hljs-type">Value</span> <span class="hljs-variable">v</span> <span class="hljs-operator">=</span> entry.getValue();<br>        target.update(key, meetValue(target.get(key), v));<br>        <span class="hljs-comment">//使用meetValue函数来实现meet操作，fact是指上一轮的，target是这一轮的</span><br>    &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><em>java 函数式编程</em></li>
+<li><em>java stream</em></li>
+</ul>
+</blockquote>
+<h2 id="4-boolean-transferNode-Stmt-CPFact-CPFact"><a href="#4-boolean-transferNode-Stmt-CPFact-CPFact" class="headerlink" title="4 - boolean transferNode(Stmt, CPFact, CPFact)"></a>4 - boolean transferNode(Stmt, CPFact, CPFact)</h2><h3 id="Value-evaluate-Exp-CPFact"><a href="#Value-evaluate-Exp-CPFact" class="headerlink" title="Value evaluate(Exp,CPFact)"></a>Value evaluate(Exp,CPFact)</h3><blockquote>
+<p>这个方法会计算表达式（Exp）的值（Value）。当然，此处的值是格上的抽象值。你需要参考第 6 讲课件的第 247 页上的内容来实现它的三种情况。对于其它情况，该方法会像我们在第 2.1 节提到的那样返回 NAC。你应该在 transferNode() 方法中调用它来进行表达式的求值。</p>
+</blockquote>
+<p>1 - 先实现一元的情况：</p>
+<img src="/images/Constan-Propagation-and-Worklist-Solver/transfer-function1.png" srcset="/img/loading.gif" lazyload width=500>
+
+<ul>
+<li>exp是一个constant，将int值转换为抽象的Value值并返回。</li>
+</ul>
+<p>pascal.taie.ir.exp.IntLiteral</p>
+<blockquote>
+<p>根据 Java 的语言规范，在 Tai-e 中把常量称作字面量（Literals）。每个 IntLiteral 类的实例都表示一个程序中的整数字面量。可以通过调用 getValue() 方法来获取它的值。</p>
+</blockquote>
+<p>Code:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (exp <span class="hljs-keyword">instanceof</span> IntLiteral intLiteral) &#123;<br>    <span class="hljs-keyword">return</span>  Value.makeConstant(intLiteral.getValue());<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>exp是一个变量值，取出变量Val中的Value值并返回。(CPFact实现从变量（Var）到格上抽象值（Value）的映射)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (exp <span class="hljs-keyword">instanceof</span> Var v) &#123;<br>    <span class="hljs-keyword">return</span> in.get(v);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>exp有两个操作数，且两个操作数并不都是constant，根据图片返回NAC。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (!(exp <span class="hljs-keyword">instanceof</span> BinaryExp binaryExp)) &#123;<br>    <span class="hljs-keyword">return</span> Value.getNAC();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>2 - 处理二元的情况</p>
+<ul>
+<li>将两个操作数的表达式分解成为变量valx，valy和操作符op。</li>
+</ul>
+<p>pascal.taie.ir.exp.Exp</p>
+<blockquote>
+<p>下图是一个继承关系的简单示意图（已略去与本次作业无关的类）。</p>
+</blockquote>
+<img src="/images/Constan-Propagation-and-Worklist-Solver/exp.png" srcset="/img/loading.gif" lazyload width=500>
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">op</span> <span class="hljs-operator">=</span> ((BinaryExp) exp).getOperator().toString();<br><span class="hljs-type">Value</span> <span class="hljs-variable">valx</span> <span class="hljs-operator">=</span> in.get(((BinaryExp) exp).getOperand1());<br><span class="hljs-type">Value</span> <span class="hljs-variable">valy</span> <span class="hljs-operator">=</span> in.get(((BinaryExp) exp).getOperand2());<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>分别讨论三种情况<blockquote>
+<p>对于除以 0 的情况（出现在 &#x2F; 和 % 中），我们规定结果为 UNDEF。例如，对于 x &#x3D; a &#x2F; 0，x 的值将会是 UNDEF。</p>
+</blockquote>
+<img src="/images/Constan-Propagation-and-Worklist-Solver/transfer-function2.png" srcset="/img/loading.gif" lazyload width=550></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span>((op.equals(<span class="hljs-string">&quot;/&quot;</span>) || op.equals(<span class="hljs-string">&quot;%&quot;</span>)) &amp;&amp; (valY.isConstant() &amp;&amp; valY.getConstant() == <span class="hljs-number">0</span>))&#123;<br>    <span class="hljs-keyword">return</span> Value.getUndef();<br>&#125;<br><br><span class="hljs-keyword">if</span>(valX.isNAC() || valY.isNAC()) &#123;<br>    <span class="hljs-keyword">return</span> Value.getNAC();<br>&#125;<br><br><span class="hljs-keyword">if</span>(valX.isUndef() || valY.isUndef()) &#123;<br>    <span class="hljs-keyword">return</span> Value.getUndef();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>处理条件表达式<blockquote>
+<p>条件表达式（如 a &#x3D;&#x3D; b）的值由 0（若为 False）和 1（若为 True）来表示。</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">calc</span><span class="hljs-params">(<span class="hljs-type">boolean</span> res)</span>&#123;<br>    <span class="hljs-keyword">return</span> res ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>根据op计算结果值并返回</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span> <span class="hljs-variable">x</span> <span class="hljs-operator">=</span> valX.getConstant(), y = valY.getConstant();<br><span class="hljs-type">int</span> res;<br><br>res = <span class="hljs-keyword">switch</span> (op)&#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;+&quot;</span> -&gt; x + y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;*&quot;</span> -&gt; x * y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;-&quot;</span> -&gt; x - y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;/&quot;</span> -&gt; x / y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;%&quot;</span> -&gt; x % y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;|&quot;</span> -&gt; x | y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&amp;&quot;</span> -&gt; x &amp; y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;^&quot;</span> -&gt; x ^ y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;==&quot;</span> -&gt; calc(x == y);<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;!=&quot;</span> -&gt; calc(x != y);<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&lt;&quot;</span> -&gt; calc(x &lt; y);<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&gt;&quot;</span> -&gt; calc(x &gt; y);<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&lt;=&quot;</span> -&gt; calc(x &lt;= y);<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&gt;=&quot;</span> -&gt; calc(x &gt;= y);<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&lt;&lt;&quot;</span> -&gt; x &lt;&lt; y;<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;&gt;&gt;&quot;</span> -&gt; x &gt;&gt; y;<br>    <span class="hljs-keyword">default</span> -&gt;  x &gt;&gt;&gt; y;<br>&#125;;<br><span class="hljs-keyword">return</span> Value.makeConstant(res);<br></code></pre></td></tr></table></figure>
+
+<h3 id="boolean-transferNode-Stmt-stmt-CPFact-in-CPFact-out"><a href="#boolean-transferNode-Stmt-stmt-CPFact-in-CPFact-out" class="headerlink" title="boolean transferNode(Stmt stmt, CPFact in, CPFact out)"></a>boolean transferNode(Stmt stmt, CPFact in, CPFact out)</h3><ul>
+<li>普通的语句直接赋值</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">boolean</span> <span class="hljs-variable">change</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br><span class="hljs-keyword">for</span>(Var key : in.keySet())&#123;<span class="hljs-comment">//普通的语句就直接赋值</span><br>    change |= out.update(key, in.get(key));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是DefinitionStmt，就做相应的处理</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span>(stmt <span class="hljs-keyword">instanceof</span> DefinitionStmt&lt;?, ?&gt; def)&#123;<br>    <span class="hljs-type">LValue</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> def.getLValue();<br>    <span class="hljs-keyword">if</span>(left <span class="hljs-keyword">instanceof</span> Var x)&#123;<br>        <span class="hljs-keyword">if</span>(canHoldInt(x))&#123;<br>            <span class="hljs-type">Value</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> evaluate(def.getRValue(), in);<br>            change |= out.update(x, res);<br>        &#125;<br>    &#125;<br>&#125;<br><span class="hljs-keyword">return</span> change;<br></code></pre></td></tr></table></figure>
+
+<h1 id="实现-Worklist-求解器"><a href="#实现-Worklist-求解器" class="headerlink" title="实现 Worklist 求解器"></a>实现 Worklist 求解器</h1><ul>
+<li><strong>Solver.initializeForward(CFG, DataflowResult)</strong></li>
+<li><strong>WorkListSolver.doSolveForward(CFG, DataflowResult)</strong></li>
+</ul>
+<h2 id="1-Solver-initializeForward-CFG-DataflowResult"><a href="#1-Solver-initializeForward-CFG-DataflowResult" class="headerlink" title="1 - Solver.initializeForward(CFG, DataflowResult)"></a>1 - Solver.initializeForward(CFG, DataflowResult)</h2>
                 
               </div>
             
@@ -407,6 +548,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/03/04/Openstack-RPC/" title="Openstack-RPC">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Openstack-RPC</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

@@ -16,39 +16,22 @@
   <meta name="author" content="Yao wenxiao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1 - Iterative Algorithm, Another View 假设给定的 CFG 有 k 个节点，迭代算法每次迭代更新每个节点的 OUT[n] 定义 k-tuple (OUT[n1], … , OUT[nk])，则该元组为集合 V^k 的一个元素（V 是数据流分析的值的域） 那么每次迭代可以视作作用了转移函数和流控制处理的一次映射，即：F: V^k —&gt; V^k 整个算法就是在">
+    <meta name="description" content="Nova1 - nova-compute (nova 计算服务)..&#x2F;stack\nova\nova\compute\rpcapi.py:455: rpc.get_client(target, version_cap, serializer)..&#x2F;stack\nova\nova\compute\rpcapi.py:556: return rpc.get_client(targe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Data Flow Analysis( Foundations )">
-<meta property="og:url" content="http://example.com/2024/02/27/Data-Flow-Analysis-Foundations/index.html">
+<meta property="og:title" content="Openstack-RPC">
+<meta property="og:url" content="http://example.com/2024/03/04/Openstack-RPC/index.html">
 <meta property="og:site_name" content="Kevin&#39;s Blog">
-<meta property="og:description" content="1 - Iterative Algorithm, Another View 假设给定的 CFG 有 k 个节点，迭代算法每次迭代更新每个节点的 OUT[n] 定义 k-tuple (OUT[n1], … , OUT[nk])，则该元组为集合 V^k 的一个元素（V 是数据流分析的值的域） 那么每次迭代可以视作作用了转移函数和流控制处理的一次映射，即：F: V^k —&gt; V^k 整个算法就是在">
+<meta property="og:description" content="Nova1 - nova-compute (nova 计算服务)..&#x2F;stack\nova\nova\compute\rpcapi.py:455: rpc.get_client(target, version_cap, serializer)..&#x2F;stack\nova\nova\compute\rpcapi.py:556: return rpc.get_client(targe">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Another-View.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Partial-Order.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/ul-bound.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/least-ul-bound.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/lattice.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/semilattice.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/complete-lattice.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/product-lattice.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/fixed-point.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/relate.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/May-Must-Analysis.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/MOP.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/CP-lattice.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/CP-function.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/CP-nondistributivity.png">
-<meta property="og:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Worklist%20Algorithm.png">
-<meta property="article:published_time" content="2024-02-27T11:21:01.000Z">
-<meta property="article:modified_time" content="2024-02-29T11:01:30.798Z">
+<meta property="article:published_time" content="2024-03-04T06:27:48.000Z">
+<meta property="article:modified_time" content="2024-03-04T06:39:05.143Z">
 <meta property="article:author" content="Yao wenxiao">
-<meta property="article:tag" content="NJU">
+<meta property="article:tag" content="RPC">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/images/Data-Flow-Analysis-Foundations/Another-View.png">
   
   
   
-  <title>Data Flow Analysis( Foundations ) - Kevin&#39;s Blog</title>
+  <title>Openstack-RPC - Kevin&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -247,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Data Flow Analysis( Foundations )"></span>
+            <span id="subtitle" data-typed-text="Openstack-RPC"></span>
           
         </div>
 
@@ -258,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-27 19:21" pubdate>
-          February 27, 2024 pm
+        <time datetime="2024-03-04 14:27" pubdate>
+          March 4, 2024 pm
         </time>
       </span>
     
@@ -270,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k words
+          255 words
         
       </span>
     
@@ -281,7 +264,7 @@
         
         
         
-          10 mins
+          3 mins
         
       </span>
     
@@ -326,147 +309,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Data Flow Analysis( Foundations )</h1>
+            <h1 id="seo-header">Openstack-RPC</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="1-Iterative-Algorithm-Another-View"><a href="#1-Iterative-Algorithm-Another-View" class="headerlink" title="1 - Iterative Algorithm, Another View"></a>1 - Iterative Algorithm, Another View</h1><ul>
-<li>假设给定的 CFG 有 k 个节点，迭代算法每次迭代更新每个节点的 OUT[n]</li>
-<li>定义 k-tuple (OUT[n1], … , OUT[nk])，则该元组为集合 V^k 的一个元素（V 是数据流分析的值的域）</li>
-<li>那么每次迭代可以视作作用了转移函数和流控制处理的一次映射，即：F: V^k —&gt; V^k</li>
-<li>整个算法就是在不断地输出这样的 k-tuple 直到出现连续两个相同的为止</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-Foundations/Another-View.png" srcset="/img/loading.gif" lazyload>
+                <h1 id="Nova"><a href="#Nova" class="headerlink" title="Nova"></a>Nova</h1><h2 id="1-nova-compute-nova-计算服务"><a href="#1-nova-compute-nova-计算服务" class="headerlink" title="1 - nova-compute (nova 计算服务)"></a>1 - nova-compute (nova 计算服务)</h2><p>..&#x2F;stack\nova\nova\compute\rpcapi.py:455: rpc.get_client(target, version_cap, serializer)<br>..&#x2F;stack\nova\nova\compute\rpcapi.py:556: return rpc.get_client(target,</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">router</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Provides singleton access to nova.rpc.ClientRouter for this API</span><br><span class="hljs-string"></span><br><span class="hljs-string">    The ClientRouter is constructed and accessed as a singleton to avoid</span><br><span class="hljs-string">    querying all cells for a minimum nova-compute service version when</span><br><span class="hljs-string">    [upgrade_levels]/compute=auto and we have access to the API DB.</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">global</span> _ROUTER<br>    <span class="hljs-keyword">if</span> _ROUTER <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>        <span class="hljs-keyword">with</span> lockutils.lock(<span class="hljs-string">&#x27;compute-rpcapi-router&#x27;</span>):<br>            <span class="hljs-keyword">if</span> _ROUTER <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>                target = messaging.Target(topic=RPC_TOPIC, version=<span class="hljs-string">&#x27;6.0&#x27;</span>)<br>                upgrade_level = CONF.upgrade_levels.compute<br>                <span class="hljs-keyword">if</span> upgrade_level == <span class="hljs-string">&#x27;auto&#x27;</span>:<br>                    version_cap = self._determine_version_cap(target)<br>                <span class="hljs-keyword">else</span>:<br>                    version_cap = self.VERSION_ALIASES.get(upgrade_level,<br>                                                           upgrade_level)<br>                serializer = objects_base.NovaObjectSerializer()<br><br>                <span class="hljs-comment"># NOTE(danms): We need to poke this path to register CONF</span><br>                <span class="hljs-comment"># options that we use in self.get_client()</span><br>                rpc.get_client(target, version_cap, serializer)<br><br>                default_client = self.get_client(target, version_cap,<br>                                                 serializer)<br>                _ROUTER = rpc.ClientRouter(default_client)<br>    <span class="hljs-keyword">return</span> _ROUTER<br></code></pre></td></tr></table></figure>
 
-<blockquote>
-<p>迭代算法会在 X &#x3D; F(X) 处停下来，即数学定义上的一个不动点（fixed point）</p>
-</blockquote>
-<p>Think:</p>
-<ul>
-<li>Is the algorithm guaranteed to terminate or reach the fixed point, or does it always have a solution?</li>
-<li>If so, is there only one solution or only one fixed point? If more than one, is our solution the best one (most precise)?</li>
-<li>When will the algorithm reach the fixed point, or when can we get the solution? (时间复杂度)</li>
-</ul>
-<h1 id="2-Partial-Order"><a href="#2-Partial-Order" class="headerlink" title="2- Partial Order"></a>2- Partial Order</h1><ul>
-<li>偏序关系（Partial Order）满足<strong>自反性</strong>、<strong>反对称性</strong>、<strong>传递性</strong>。</li>
-<li>一个偏序集（poset）中的任意两个元素之间不一定满足偏序关系</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-Foundations/Partial-Order.png" srcset="/img/loading.gif" lazyload width=550>
+<h2 id="2-nova-conductor-nova数据库服务，提供数据库访问"><a href="#2-nova-conductor-nova数据库服务，提供数据库访问" class="headerlink" title="2 - nova-conductor (nova数据库服务，提供数据库访问)"></a>2 - nova-conductor (nova数据库服务，提供数据库访问)</h2><p>..&#x2F;stack\nova\nova\conductor\rpcapi.py:221: self.client &#x3D; rpc.get_client(target,<br>..&#x2F;stack\nova\nova\conductor\rpcapi.py:299: self.client &#x3D; rpc.get_client(target, serializer&#x3D;serializer)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-built_in">super</span>(ConductorAPI, self).__init__()<br>    target = messaging.Target(topic=RPC_TOPIC, version=<span class="hljs-string">&#x27;3.0&#x27;</span>)<br>    version_cap = self.VERSION_ALIASES.get(CONF.upgrade_levels.conductor,<br>                                           CONF.upgrade_levels.conductor)<br>    serializer = objects_base.NovaObjectSerializer()<br>    self.client = rpc.get_client(target,<br>                                 version_cap=version_cap,<br>                                 serializer=serializer)<br></code></pre></td></tr></table></figure>
 
-<h1 id="3-Upper-and-Lower-Bounds"><a href="#3-Upper-and-Lower-Bounds" class="headerlink" title="3 - Upper and Lower Bounds"></a>3 - Upper and Lower Bounds</h1><p>上界（upper bound）和下界（lower bound）<br><img src="/images/Data-Flow-Analysis-Foundations/ul-bound.png" srcset="/img/loading.gif" lazyload width=450></p>
-<p>最小上界（least upper bound）和最大下界（greatest lower bound）<br><img src="/images/Data-Flow-Analysis-Foundations/least-ul-bound.png" srcset="/img/loading.gif" lazyload width=500></p>
-<blockquote>
-<p>不是每个偏序集都有最小上界（最大下界）；若偏序集存在最小上界（最大下界），则是唯一的</p>
-</blockquote>
-<h1 id="4-Lattice-Semilattice-Complete-and-Product-Lattice"><a href="#4-Lattice-Semilattice-Complete-and-Product-Lattice" class="headerlink" title="4 - Lattice, Semilattice, Complete and Product Lattice"></a>4 - Lattice, Semilattice, Complete and Product Lattice</h1><ul>
-<li>格（Lattice）</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-Foundations/lattice.png" srcset="/img/loading.gif" lazyload width=500>
-
-<ul>
-<li>半格（Semilattice）</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-Foundations/semilattice.png" srcset="/img/loading.gif" lazyload width=500>
-
-<ul>
-<li>全格（Complete Lattice）</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-Foundations/complete-lattice.png" srcset="/img/loading.gif" lazyload width=500>
-
-<blockquote>
-<p>Every <strong>finite</strong> lattice (P is finite) is a complete lattice. ( 有穷格一定是全格，全格不一定是有穷格 )</p>
-</blockquote>
-<ul>
-<li>格的积（Product Lattice）</li>
-</ul>
-<img src="/images/Data-Flow-Analysis-Foundations/product-lattice.png" srcset="/img/loading.gif" lazyload width=500>
-
-<blockquote>
-<ul>
-<li>A product lattice is a lattice.</li>
-<li>If a product lattice L is a product of complete lattices, then L is also complete.</li>
-</ul>
-</blockquote>
-<h1 id="5-Data-Flow-Analysis-Framework-via-Lattice"><a href="#5-Data-Flow-Analysis-Framework-via-Lattice" class="headerlink" title="5 - Data Flow Analysis Framework via Lattice"></a>5 - Data Flow Analysis Framework via Lattice</h1><p>A data flow analysis framework (D, L, F) consists of:</p>
-<ul>
-<li>D: a direction of data flow: forwards or backwards.</li>
-<li>L: a lattice including domain of the values V and a meet ∩ or join ∪ operator.</li>
-<li>F: a family of transfer functions from V to V.<blockquote>
-<p>Data flow analysis can be seen as iteratively applying transfer functions and meet&#x2F;join operations on the values of a lattice.</p>
-</blockquote>
-</li>
-</ul>
-<h1 id="6-Monotonicity-and-Fixed-Point-Theorem"><a href="#6-Monotonicity-and-Fixed-Point-Theorem" class="headerlink" title="6 - Monotonicity and Fixed Point Theorem"></a>6 - Monotonicity and Fixed Point Theorem</h1><h2 id="Monotonicity-Define："><a href="#Monotonicity-Define：" class="headerlink" title="Monotonicity Define："></a>Monotonicity Define：</h2><p>一个函数f: L → L (L为lattice)是单调的，当且仅当∀x, y ∈ L,x ⊑ y ⟹ f(x) ⊑ f(y)。</p>
-<h2 id="Fixed-Point-Theorem"><a href="#Fixed-Point-Theorem" class="headerlink" title="Fixed Point Theorem"></a>Fixed Point Theorem</h2><img src="/images/Data-Flow-Analysis-Foundations/fixed-point.png" srcset="/img/loading.gif" lazyload width=500>
-
-<p>Let’s prove</p>
-<ul>
-<li>Existence of fixed point.</li>
-<li>The fixed point is the least.</li>
-</ul>
-<h1 id="7-Relate-Iteraive-Algorithm-to-Fixed-Point-Theorem"><a href="#7-Relate-Iteraive-Algorithm-to-Fixed-Point-Theorem" class="headerlink" title="7 - Relate Iteraive Algorithm to Fixed Point Theorem"></a>7 - Relate Iteraive Algorithm to Fixed Point Theorem</h1><img src="/images/Data-Flow-Analysis-Foundations/relate.png" srcset="/img/loading.gif" lazyload width=500>
-
-<h1 id="8-May-Must-Analysis-A-Lattice-View"><a href="#8-May-Must-Analysis-A-Lattice-View" class="headerlink" title="8 - May&#x2F;Must Analysis, A Lattice View"></a><em>8 - May&#x2F;Must Analysis, A Lattice View</em></h1><img src="/images/Data-Flow-Analysis-Foundations/May-Must-Analysis.png" srcset="/img/loading.gif" lazyload width=550>
-
-<blockquote>
-<ul>
-<li>may分析的目的可以看作是报错，因此初始化在bottom，此时分析结果为无错误，因此肯定是一个unsafe的结果；而在top处，分析结果是所有点都出错的，这个肯定是safe的，但是就有些是做了无用功了；因此我们的目的是在二者之间找到一个平衡点，假设{a,c}是truth，那么以此为界可以划分为两块(之所以是区域是因为这其实是一个product lattice)，交界点便是truth。</li>
-<li>must的目的可以看作是删除优化，因此初始化在top，此时分析结果为所有语句都可删除，那肯定是unsafe的，其余类比may可得。</li>
-<li>会发现may分析是查错用的，所以必须都是1才安全，而must是优化用的，所以都是0才最安全，无论是MUST还&gt;是MAY，都是从Unsafe往Safe方向走，达到第一个不动点。</li>
-<li>就是用之前 {a, b, c} 的图来理解，现在有一个 {a} 和 一个 {b}，它们固然可以走到 {a, b, c}，但是它们的 join 是 {a, b}</li>
-<li>图中所有不动点都是safe的，其实是看算法设计情况，如果由不动点在unsafe区域，那么这个算法就是不合格的。</li>
-</ul>
-</blockquote>
-<h1 id="9-Distributivity-and-MOP"><a href="#9-Distributivity-and-MOP" class="headerlink" title="9 - Distributivity and MOP"></a>9 - Distributivity and MOP</h1><ul>
-<li>Meet-Over-All-Paths Solution (MOP)</li>
-</ul>
-<blockquote>
-<p>与之前使用的算法不同，我们以前使用的算法是在运行过程中沿着数据流反复迭代的，而MOP是找出从开头到结尾所有路径，分别进行传递函数计算，最后将算完的所有路径进行⊔&#x2F;⊓</p>
-</blockquote>
-<img src="/images/Data-Flow-Analysis-Foundations/MOP.png" srcset="/img/loading.gif" lazyload width=500>
-
-<blockquote>
-<p>由于某些路径可能实际无法到达，因此MOP不是特别精确；而在正常的程序中路径过多，几乎无法全部枚举，因此MOP也不太实际。</p>
-</blockquote>
-<ul>
-<li>Iterative Algorithm vs. MOP<blockquote>
-<p>iterative algorithm: F(x ∪ y)<br>MOP: F(X) ∪ F(y)</p>
-</blockquote>
-</li>
-</ul>
-<p>经过证明MOP ⊑ Ours满足偏序关系，根据之前的图，对于may analyses，MOP更加接近truth因此更加精确。<br>同理，对于must analyses，有Ours ⊑ MOP，根据之前的图，MOP接近truth，更加精准。<br>只要满足了转换函数是distributive的条件，我们的方法就和MOP一样精准，上一篇文章中提到的三个算法都是distributive，下面将一个不是distributive的算法。</p>
-<h1 id="10-Constant-Propagation"><a href="#10-Constant-Propagation" class="headerlink" title="10 - Constant Propagation"></a>10 - Constant Propagation</h1><h2 id="Define"><a href="#Define" class="headerlink" title="Define"></a>Define</h2><p>Given a variable x at program point p, determine whether x is guaranteed to hold a constant value at p.</p>
-<blockquote>
-<p>在程序点p处给定一个变量x，判断x在程序点p处是否<strong>一定</strong>指向一个常量。</p>
-</blockquote>
-<ul>
-<li>The OUT of each node in CFG, includes a set of pairs (x, v) where x is a variable and v is the value held by x after that node.<blockquote>
-<p>这是一个类似must分析，因为必须所有到点p的path都是这个常量才行；但有和传统的不大一样。<br>在CFG中每个节点的输出包括一个对(x, v)，其中x是变量而v是在该节点后x指向的具体值。</p>
-</blockquote>
-</li>
-</ul>
-<p>Why constant propagation?</p>
-<blockquote>
-<p>常量传播可以把原本在运行时的计算转移到编译时进行，减小了程序运行时的开销。同时常量传播还有助于实现其它的优化，比如死代码消除。</p>
-</blockquote>
-<h2 id="Constant-Propagation-Lattice"><a href="#Constant-Propagation-Lattice" class="headerlink" title="Constant Propagation - Lattice"></a>Constant Propagation - Lattice</h2><img src="/images/Data-Flow-Analysis-Foundations/CP-lattice.png" srcset="/img/loading.gif" lazyload width=500>
-
-<h2 id="Constant-Propagation-Transfer-Function"><a href="#Constant-Propagation-Transfer-Function" class="headerlink" title="Constant Propagation - Transfer Function"></a>Constant Propagation - Transfer Function</h2><img src="/images/Data-Flow-Analysis-Foundations/CP-function.png" srcset="/img/loading.gif" lazyload width=500>
-
-<h2 id="Constant-Propagation-Nondistributivity"><a href="#Constant-Propagation-Nondistributivity" class="headerlink" title="Constant Propagation - Nondistributivity"></a>Constant Propagation - Nondistributivity</h2><img src="/images/Data-Flow-Analysis-Foundations/CP-nondistributivity.png" srcset="/img/loading.gif" lazyload width=500>
-
-<h1 id="11-Worklist-Algorithm"><a href="#11-Worklist-Algorithm" class="headerlink" title="11 - Worklist Algorithm"></a>11 - Worklist Algorithm</h1><img src="/images/Data-Flow-Analysis-Foundations/Worklist Algorithm.png" srcset="/img/loading.gif" lazyload width=500>
-
-<h1 id="The-X-You-Need-To-Understand-in-This-Lecture"><a href="#The-X-You-Need-To-Understand-in-This-Lecture" class="headerlink" title="The X You Need To Understand in This Lecture"></a>The X You Need To Understand in This Lecture</h1><ul>
-<li>Understand the functional view of iterarive algorithm</li>
-<li>The definitions of lattice and complete lattice</li>
-<li>Understand the fixed-point theorem</li>
-<li>How to summarize may and must analyses in lattices</li>
-<li>The relation between MOP and the solution produced by the iterative algorithm </li>
-<li>Constant propagation analysis </li>
-<li>Worklist algorithm</li>
-</ul>
+<h2 id="3-nova-scheduler-nova-调度服务"><a href="#3-nova-scheduler-nova-调度服务" class="headerlink" title="3 - nova-scheduler (nova 调度服务)"></a>3 - nova-scheduler (nova 调度服务)</h2><p>..&#x2F;stack\nova\nova\scheduler\rpcapi.py:129: self.client &#x3D; rpc.get_client(target, version_cap&#x3D;version_cap,</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-built_in">super</span>(SchedulerAPI, self).__init__()<br>    target = messaging.Target(topic=RPC_TOPIC, version=<span class="hljs-string">&#x27;4.0&#x27;</span>)<br>    version_cap = self.VERSION_ALIASES.get(CONF.upgrade_levels.scheduler,<br>                                           CONF.upgrade_levels.scheduler)<br>    serializer = objects_base.NovaObjectSerializer()<br>    self.client = rpc.get_client(target, version_cap=version_cap,<br>                                 serializer=serializer)<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -485,7 +340,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Static-Analysis/" class="category-chain-item">Static Analysis</a>
+  <a href="/categories/OpenStack/" class="category-chain-item">OpenStack</a>
   
   
 
@@ -500,7 +355,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/NJU/" class="print-no-link">#NJU</a>
+        <a href="/tags/RPC/" class="print-no-link">#RPC</a>
       
     </div>
   
@@ -512,8 +367,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Data Flow Analysis( Foundations )</div>
-      <div>http://example.com/2024/02/27/Data-Flow-Analysis-Foundations/</div>
+      <div>Openstack-RPC</div>
+      <div>http://example.com/2024/03/04/Openstack-RPC/</div>
     </div>
     <div class="license-meta">
       
@@ -525,7 +380,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>February 27, 2024</div>
+          <div>March 4, 2024</div>
         </div>
       
       
@@ -557,18 +412,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/28/Constan-Propagation-and-Worklist-Solver/" title="Constan Propagation and Worklist Solver">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Constan Propagation and Worklist Solver</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/26/Database-System-Chapter-1/" title="Database System Chapter 1">
-                        <span class="hidden-mobile">Database System Chapter 1</span>
+                      <a href="/2024/02/28/Constan-Propagation-and-Worklist-Solver/" title="Constan Propagation and Worklist Solver">
+                        <span class="hidden-mobile">Constan Propagation and Worklist Solver</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
