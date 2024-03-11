@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Yao wenxiao">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 - Call Graph Construction (CHA) 程序调用图DefineA representation of calling relationships in the program  Essentially, a call graph is a set of call edges from call-sites to their target methods (calles)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Interprocedural-Analysis">
+<meta property="og:url" content="http://example.com/2024/03/07/Interprocedural-Analysis/index.html">
+<meta property="og:site_name" content="Kevin&#39;s Blog">
+<meta property="og:description" content="1 - Call Graph Construction (CHA) 程序调用图DefineA representation of calling relationships in the program  Essentially, a call graph is a set of call edges from call-sites to their target methods (calles)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/Method-Call.png">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/dispatch.png">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/Call-Solution-of-CHA.png">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/CHA-Example.png">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/algorithm.png">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/CFG-ICFG.png">
+<meta property="og:image" content="http://example.com/images/Interprocedural-Analysis/Iterprocedural-Analysis.png">
+<meta property="article:published_time" content="2024-03-07T04:12:49.000Z">
+<meta property="article:modified_time" content="2024-03-07T08:46:35.927Z">
+<meta property="article:author" content="Yao wenxiao">
+<meta property="article:tag" content="NJU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/Interprocedural-Analysis/Method-Call.png">
+  
+  
+  
+  <title>Interprocedural-Analysis - Kevin&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"5N4kFj4bUCB8z7XhzyHf9JVv-gzGzoHsz","app_key":"R9V7AmQCax14bUI0fgBYeVsV","server_url":null,"path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Kevin&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Interprocedural-Analysis"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-07 12:12" pubdate>
+          March 7, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          766 words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Interprocedural-Analysis</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-Call-Graph-Construction-CHA-程序调用图"><a href="#1-Call-Graph-Construction-CHA-程序调用图" class="headerlink" title="1 - Call Graph Construction (CHA) 程序调用图"></a>1 - Call Graph Construction (CHA) 程序调用图</h1><h2 id="Define"><a href="#Define" class="headerlink" title="Define"></a>Define</h2><p>A representation of calling relationships in the program</p>
+<ul>
+<li>Essentially, a call graph is a set of call edges from call-sites to their target methods (calles)</li>
+</ul>
+<p><strong>OO 语言的调用图的构造</strong></p>
+<ul>
+<li>Class hierarchy analysis (CHA) : 效率高</li>
+<li>Pointer analysis (k-CFA) : 精确度高</li>
+</ul>
+<h2 id="Method-Calls-Invocations-in-Java"><a href="#Method-Calls-Invocations-in-Java" class="headerlink" title="Method Calls (Invocations) in Java"></a>Method Calls (Invocations) in Java</h2><img src="/images/Interprocedural-Analysis/Method-Call.png" srcset="/img/loading.gif" lazyload width=500>
+
+<blockquote>
+<p>JAVA 中的方法调用共有五种，其中 invokedynamic 在此不做考虑，由于 Virtual Call 的目标方法是运行时动态确定的（多态），故构造调用图的难点和关键在于如何处理 Virtual Call</p>
+</blockquote>
+<p><strong>Method Dispatch of Virtual Calls</strong></p>
+<p>During run-time, a virtual call is resolved based on</p>
+<ol>
+<li>type of the receiver object (pointed by 0): c</li>
+<li>method signature at the call site: m</li>
+</ol>
+<p>We define function Dispatch(c,m) to simulate the procedure of run-time method dispatch</p>
+<img src="/images/Interprocedural-Analysis/dispatch.png" srcset="/img/loading.gif" lazyload width=500>
+
+<blockquote>
+<p>Virtual Call 的方法分派依据 receiver object 的类型 c 和方法的签名 m （形如 *&lt;ClassType：ReturnType MehtodName（ParameterTypes）&gt;*），定义函数 Dispatch(c, m) 去模拟运行时方法分派，总的思路是优先在子类中匹配，匹配不到则递归地到父类中匹配</p>
+</blockquote>
+<h2 id="Class-Hierarchy-Analysis-CHA"><a href="#Class-Hierarchy-Analysis-CHA" class="headerlink" title="Class Hierarchy Analysis* (CHA)"></a>Class Hierarchy Analysis* (CHA)</h2><ul>
+<li>Require the class hierarchy information (inheritance structure) of the whole program.</li>
+<li>Resolve a virtual call based on the declared type of receiver variable of the call site.</li>
+<li>Assume the receiver variable a may point to objects of class A or all subclassses of A.</li>
+<li>Resolve target methods by looking up the class hierarchy of class A.</li>
+</ul>
+<p><strong>Call Resolution of CHA</strong></p>
+<img src="/images/Interprocedural-Analysis/Call-Solution-of-CHA.png" srcset="/img/loading.gif" lazyload width=500>
+
+<ul>
+<li><p>static call</p>
+<blockquote>
+<p>static call，可以简单翻译为静态调用，主要用于静态调用方法，如图所示，直接用类C调用方法而不需要定义对象c，因此很明显调用的就是当前类的方法，所以直接加到集合T中。</p>
+</blockquote>
+</li>
+<li><p>special call</p>
+<blockquote>
+<p>special call，特殊调用，主要分为三种情况，这是第一种使用 super 类的调用方法那么这个 foo() 虽然在当前类有定义，但是实际使用的是父类的 foo() ，因此需要使用 Dispatch 函数，其中的 foo() 的签名 m 由编译器返回信息可以知道是 B 的，那么获取 foo() 返回值的 c 也指向 B，也就相当于在父类中寻找了。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>special call 中的另外两种情况，构造函数和私有函数，其中构造函数暂时可以忽略，所以先看私有函数，此时编译器返回的信息能算法知道此时 m 指向的仍是 C，那么 Dispatch(cm,m) 得到的仍然是这个私有方法 C.bar()。</p>
+</blockquote>
+<ul>
+<li>virtual call<blockquote>
+<p>virtual call，这也是 CHA 区别于其他算法的主要之处。除了以上提到的四种情况以外，其他情况都是用 virtual call 来处理，因为除了 super 会将 m 的类类型指定为父类以外，别的都是当前类，所以该算法会对此方法做一个 Dispatch(c,m) 并将 c 的所有子集以及子集的子集全都做一次 Dispatch(c’,m)。直观来看，可以分为两步，第一步是对本身做一次 Dispatch ，看看当前类中是否有 foo() ，没有的话就到父类中递归地找；第二步是在当前类地所有子集中找到所有的 foo() ，然后将这些 foo 同第一步找到的 foo 全都加入 T 中。</p>
+</blockquote>
+</li>
+</ul>
+<p><em>example</em></p>
+<img src="/images/Interprocedural-Analysis/CHA-Example.png" srcset="/img/loading.gif" lazyload width=500>
+
+<p>Features of CHA</p>
+<ul>
+<li>Advantage: fast</li>
+<li>Disadvantage: imprecise</li>
+</ul>
+<h2 id="Call-Graph-Construction"><a href="#Call-Graph-Construction" class="headerlink" title="Call Graph Construction"></a>Call Graph Construction</h2><p><strong>Call Graph Construction: Algorithm</strong></p>
+<img src="/images/Interprocedural-Analysis/algorithm.png" srcset="/img/loading.gif" lazyload width=500>
+
+<ul>
+<li>WL: Work list, containing the methods to be processed</li>
+<li>CG: Call graph, aset of call edges</li>
+<li>RM: A set of reachable methods</li>
+</ul>
+<h2 id="Interprocedural-Control-Flow-Graph"><a href="#Interprocedural-Control-Flow-Graph" class="headerlink" title="Interprocedural Control-Flow Graph"></a>Interprocedural Control-Flow Graph</h2><p><strong>CFG vs. ICFG</strong></p>
+<ul>
+<li>CFG represents structure of an individual method.</li>
+<li>ICFG represents structure of the whole program.</li>
+<li>An ICFG of a program consists of CFGs of the methods in the program, <em>plus two kinds of additional edges</em>:<blockquote>
+<ul>
+<li><strong>Call edges</strong>: from call sites to the entry nodes of their callees.</li>
+<li><strong>Return edges</strong>: from return statements of the callees to the statements following their call sites.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<img src="/images/Interprocedural-Analysis/CFG-ICFG.png" srcset="/img/loading.gif" lazyload width=300>
+
+<h2 id="Interprocedural-Data-Flow-Analysis"><a href="#Interprocedural-Data-Flow-Analysis" class="headerlink" title="Interprocedural Data-Flow Analysis"></a>Interprocedural Data-Flow Analysis</h2><img src="/images/Interprocedural-Analysis/Iterprocedural-Analysis.png" srcset="/img/loading.gif" lazyload width=500>
+
+<ul>
+<li>Call edge transfer: pass argument values</li>
+<li>Return edge transfer: pass return values</li>
+<li>Node transfer: same as intra-procedural constant propagation, plus that: for each call node, kill data-flow value for the LHS variable. Its value will flow to return site along the return edges.<blockquote>
+<p>调用边传递函数，用于传递参数值<br>返回边传递函数，用于传递返回值<br>Node transfer：与前面文章提到的传递函数基本一样，但是多了一个性质，对于每次调用(例如b&#x3D;foo(a))会将等式左侧的数值kill掉，然后在下一步中有返回边传递函数重新赋值。这个操作可以在返回值与原值不同时防止数据冲突。</p>
+</blockquote>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Static-Analysis/" class="category-chain-item">Static Analysis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/NJU/" class="print-no-link">#NJU</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Interprocedural-Analysis</div>
+      <div>http://example.com/2024/03/07/Interprocedural-Analysis/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Yao wenxiao</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 7, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/07/Pointer-Analysis/" title="Pointer-Analysis">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Pointer-Analysis</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/06/The-Logic-Of-OpenStack/" title="The-Logic-Of-OpenStack">
+                        <span class="hidden-mobile">The-Logic-Of-OpenStack</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"5N4kFj4bUCB8z7XhzyHf9JVv-gzGzoHsz","appKey":"R9V7AmQCax14bUI0fgBYeVsV","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
