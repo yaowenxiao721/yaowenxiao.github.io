@@ -29,8 +29,11 @@
 <meta property="og:image" content="http://example.com/images/Pointer-Analysis/Analysis-Scope.png">
 <meta property="og:image" content="http://example.com/images/Pointer-Analysis/domains-notations.png">
 <meta property="og:image" content="http://example.com/images/Pointer-Analysis/Rules.png">
+<meta property="og:image" content="http://example.com/images/Pointer-Analysis/PFG-EP.png">
+<meta property="og:image" content="http://example.com/images/Pointer-Analysis/Pointer-Analysis-Algorithms.png">
+<meta property="og:image" content="http://example.com/images/Pointer-Analysis/cf.png">
 <meta property="article:published_time" content="2024-03-07T08:47:33.000Z">
-<meta property="article:modified_time" content="2024-03-11T12:29:00.821Z">
+<meta property="article:modified_time" content="2024-03-13T08:59:03.604Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
@@ -260,7 +263,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          615 words
+          1.3k words
         
       </span>
     
@@ -271,7 +274,7 @@
         
         
         
-          6 mins
+          11 mins
         
       </span>
     
@@ -428,12 +431,61 @@
 <img src="/images/Pointer-Analysis/Rules.png" srcset="/img/loading.gif" lazyload width=500>
 
 <ol>
-<li>New语句负责新建对象实例，由于等号右边没有对应指针域，所以就没有前提条件，所以直接得到等号左侧的指针对象x对应的指针集为oi，表示为𝑜𝑖 ∈ 𝑝𝑡(𝑥)。<br>此处的𝑜𝑖 ∈ 𝑝𝑡(𝑥)代表𝑜𝑖 是 𝑝𝑡(𝑥)的子集，即𝑜𝑖 是x的指针集的子集，也可以简单理解为x指向oi。</li>
-<li>assign语句即将等号右侧的指针域传递给等号左侧</li>
-<li>store语句是将指针存储到对象的域中的操作，将等号右侧指针域传递给左侧对象的域的指针集中。</li>
-<li>load语句类似于store语句，将等号右侧的对象的域的指针集的数据加载到等号左侧的y中。</li>
+<li>New语句负责新建对象实例，由于等号右边没有对应指针域，所以就没有前提条件，所以直接得到等号左侧的指针对象x对应的指针集为oi，表示为 𝑜𝑖 ∈ 𝑝𝑡(𝑥)。<br>此处的 𝑜𝑖 ∈ 𝑝𝑡(𝑥) 代表 𝑜𝑖 是 𝑝𝑡(𝑥) 的子集，即 𝑜𝑖 是 x 的指针集的子集，也可以简单理解为 x 指向 oi。</li>
+<li>assign 语句即将等号右侧的指针域传递给等号左侧</li>
+<li>store 语句是将指针存储到对象的域中的操作，将等号右侧指针域传递给左侧对象的域的指针集中。</li>
+<li>load 语句类似于 store 语句，将等号右侧的对象的域的指针集的数据加载到等号左侧的 y 中。</li>
 </ol>
-<h2 id="2-How-to-Implement-Pointer-Analysis"><a href="#2-How-to-Implement-Pointer-Analysis" class="headerlink" title="2 - How to Implement Pointer Analysis"></a>2 - How to Implement Pointer Analysis</h2><h2 id="3-Pointer-Analysis-Algorithms"><a href="#3-Pointer-Analysis-Algorithms" class="headerlink" title="3 - Pointer Analysis: Algorithms"></a>3 - Pointer Analysis: Algorithms</h2><h2 id="4-Pointer-Analysis-with-Method-Calls"><a href="#4-Pointer-Analysis-with-Method-Calls" class="headerlink" title="4 - Pointer Analysis with Method Calls"></a>4 - Pointer Analysis with Method Calls</h2>
+<h2 id="2-How-to-Implement-Pointer-Analysis"><a href="#2-How-to-Implement-Pointer-Analysis" class="headerlink" title="2 - How to Implement Pointer Analysis"></a>2 - How to Implement Pointer Analysis</h2><p>使用图的方式来解决传播指针集的问题。</p>
+<h3 id="Pointer-Flow-Graph-PFG"><a href="#Pointer-Flow-Graph-PFG" class="headerlink" title="Pointer Flow Graph (PFG)"></a>Pointer Flow Graph (PFG)</h3><p><strong>Define:</strong></p>
+<p>Pointer flow graph of a program is a directed graph that expresses how objects flow among th pointers in the program.</p>
+<ul>
+<li>Nodes: Pointer &#x3D; V U (O x F)<blockquote>
+<p>A node n represents a variable or a field of ana abstract object</p>
+</blockquote>
+</li>
+<li>Edges: Pointer x Pointer<blockquote>
+<p>An edge x -&gt; y means that the objects pointed by pointer x may flow to (and also be pointed to by) pointer y.</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Pointer Flow Graph: An Example</strong></p>
+<img src="/images/Pointer-Analysis/PFG-EP.png" srcset="/img/loading.gif" lazyload width=500>
+
+<blockquote>
+<p>此程序有个前提假设，就是c和d都指向oi（c指向oi说明oi肯定在c的指针集中，但是c的指针集中可能还有别的），也就是说二者是利用同一个类创建的对象。第一句和第二句可以画出两条边，代表b流向a，a流向 c.f 即 oi.f ；同理第三句第四句可以划出下面的两条边，代表c流向d，d流向 c.f 即 oi.f ；第五句代表 d.f 流向e，又因为前提条件中c和d都指向oi，所以得到第五条边。<br>由上述过程，可以总结出指针分析主要有两个过程，一是画指针流图，二是在指针流图中更新指向信息，这两个过程交互着动态进行的。例如在画第五条边的时候就需要前面的指向信息才能画出。</p>
+</blockquote>
+<h2 id="3-Pointer-Analysis-Algorithms"><a href="#3-Pointer-Analysis-Algorithms" class="headerlink" title="3 - Pointer Analysis: Algorithms"></a>3 - Pointer Analysis: Algorithms</h2><img src="/images/Pointer-Analysis/Pointer-Analysis-Algorithms.png" srcset="/img/loading.gif" lazyload width=500>
+
+<p>左边部分为main algorithm (主算法)</p>
+<ul>
+<li>S: 输入程序中的语句</li>
+<li>WL: work list，需要处理的指向信息</li>
+<li>PFG: 指针流图</li>
+</ul>
+<h3 id="Main-Algorithm"><a href="#Main-Algorithm" class="headerlink" title="Main Algorithm"></a>Main Algorithm</h3><p><strong>初始化算法</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">Solve(S)<br>    WL=[], PFG=&#123;&#125;<br>    foreach i: x = <span class="hljs-keyword">new</span> <span class="hljs-title class_">T</span>() ∈ S <span class="hljs-keyword">do</span><br>        add &lt;x, &#123;oi&#125;&gt; to WL<br>    <span class="hljs-type">foreach</span> <span class="hljs-variable">x</span> <span class="hljs-operator">=</span> y ∈ S <span class="hljs-keyword">do</span><br>        <span class="hljs-title function_">AddEdge</span><span class="hljs-params">(y, x)</span><br></code></pre></td></tr></table></figure>
+
+<p>检测所有语句中的 New 语句，将指针与对应的域绑定传入WL中</p>
+<p><strong>AddEdge 方法明细</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">AddEdge(s, t)<br>    <span class="hljs-keyword">if</span> s -&gt; t ∉ PFG then<br>        add s -&gt; t to PFG<br>        <span class="hljs-keyword">if</span> <span class="hljs-title function_">pt</span><span class="hljs-params">(s)</span> is not empty then <br>            add&lt;t,pt(s)&gt; to WL<br></code></pre></td></tr></table></figure>
+
+<p>首先判断从s流向t的边是否已经在PFG中存在，如果存在就什么是都不干，如果不存在就进行下一步。如果不存在首先将其加入，然后判断源点s的指针域是否为空，只要不为空，就将其与目标点构成对加入WL中，以确保s指向的指针域一定会传递给t。</p>
+<p><strong>差分传播</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">while</span> WL is not empty <span class="hljs-keyword">do</span><br>    remove &lt;n, pts&gt; from WL<br>    ∆ = pts - pt(n)<br>    Propagate(n, ∆)<br></code></pre></td></tr></table></figure>
+
+<img src="/images/Pointer-Analysis/cf.png" srcset="/img/loading.gif" lazyload width=250>
+
+<p>先从WL中按照某种规则取出一个对，取pts和pt(n)的差集，即去除pts中所有存在于n指针域中的指向信息，得到Δ，再对n和Δ做一个 Propagate传播操作：</p>
+<p><strong>Propagate 方法明细</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">Propagate(n, pts)<br>    <span class="hljs-keyword">if</span> pts is not empty then<br>        <span class="hljs-title function_">pt</span><span class="hljs-params">(n)</span> U= pts<br>        foreach n -&gt; s ∈ PFG <span class="hljs-keyword">do</span> <br>            add&lt;s, pts&gt; to WL<br></code></pre></td></tr></table></figure>
+
+<p>传播函数做两件事，将传入的指针域pts与操作加入n的指针域，然后将其与n的所有后继构成对加入 WL 中。结合之前的 Δ，可以理解为，将n缺少的指向信息加入n的指针域中，然后将这变化部分传播给 n 的后继。<br>其中之所以做差分，也是为了进行去重，减少系统开支。算法中 pt(n) ⋃&#x3D; pts 也是整个算法里唯一一处改变指针集的地方。</p>
+<p><strong>Store and Load</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> n represents a variable x then<br>    foreach oi ∈ Δ <span class="hljs-keyword">do</span><br>        foreach x.f = y ∈ S <span class="hljs-keyword">do</span><br>            <span class="hljs-title function_">AddEdge</span><span class="hljs-params">(y, oi.f)</span><br>        <span class="hljs-type">foreach</span> <span class="hljs-variable">y</span> <span class="hljs-operator">=</span> x.f ∈ S <span class="hljs-keyword">do</span><br>            <span class="hljs-title function_">AddEdge</span><span class="hljs-params">(oi.f, y)</span><br></code></pre></td></tr></table></figure>
+
+
+<h2 id="4-Pointer-Analysis-with-Method-Calls"><a href="#4-Pointer-Analysis-with-Method-Calls" class="headerlink" title="4 - Pointer Analysis with Method Calls"></a>4 - Pointer Analysis with Method Calls</h2>
                 
               </div>
             
@@ -522,6 +574,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/03/12/Compliers-Week1/" title="Compliers-Week1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Compliers-Week1</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
