@@ -16,22 +16,28 @@
   <meta name="author" content="Yao wenxiao">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Lexical Analysis1234if (i &#x3D;&#x3D; j)    z &#x3D; 0;else    z &#x3D;1;  \tif (i &#x3D;&#x3D; j)\n\t\tz &#x3D; 0;\n\telse\n\t\tz&#x3D; 1;   Token Class (or Class)-In English: Noun, verb, adj-In a programming language:">
+    <meta name="description" content="1 - MotivationImperative vs. Declartive命令式语言 (java、c、c++)，声明式语言 (mysql)。  Imperative: how to do Declarative: what to do可以理解为，命令式语言是告诉计算机每一步怎么做，声明式语言是告诉计算机做什么。  2 - Introduction to Datalog Datalog is a">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Compliers-Week2">
-<meta property="og:url" content="http://example.com/2024/03/13/Compliers-Week2/index.html">
+<meta property="og:title" content="Datalog-Based-Program-Analysis">
+<meta property="og:url" content="http://example.com/2024/03/19/Datalog-Based-Program-Analysis/index.html">
 <meta property="og:site_name" content="Kevin&#39;s Blog">
-<meta property="og:description" content="Lexical Analysis1234if (i &#x3D;&#x3D; j)    z &#x3D; 0;else    z &#x3D;1;  \tif (i &#x3D;&#x3D; j)\n\t\tz &#x3D; 0;\n\telse\n\t\tz&#x3D; 1;   Token Class (or Class)-In English: Noun, verb, adj-In a programming language:">
+<meta property="og:description" content="1 - MotivationImperative vs. Declartive命令式语言 (java、c、c++)，声明式语言 (mysql)。  Imperative: how to do Declarative: what to do可以理解为，命令式语言是告诉计算机每一步怎么做，声明式语言是告诉计算机做什么。  2 - Introduction to Datalog Datalog is a">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-13T03:15:23.000Z">
-<meta property="article:modified_time" content="2024-03-13T06:14:44.027Z">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/atoms.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/rules.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/execution.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/model.png">
+<meta property="og:image" content="g:\blog\hexo-blog\source\images\Datalog-Based-Program-Analysis\model.png">
+<meta property="article:published_time" content="2024-03-19T04:24:04.000Z">
+<meta property="article:modified_time" content="2024-03-19T09:01:04.676Z">
 <meta property="article:author" content="Yao wenxiao">
-<meta property="article:tag" content="CS143">
+<meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/Datalog-Based-Program-Analysis/atoms.png">
   
   
   
-  <title>Compliers-Week2 - Kevin&#39;s Blog</title>
+  <title>Datalog-Based-Program-Analysis - Kevin&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -230,7 +236,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Compliers-Week2"></span>
+            <span id="subtitle" data-typed-text="Datalog-Based-Program-Analysis"></span>
           
         </div>
 
@@ -241,8 +247,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-03-13 11:15" pubdate>
-          March 13, 2024 am
+        <time datetime="2024-03-19 12:24" pubdate>
+          March 19, 2024 pm
         </time>
       </span>
     
@@ -253,7 +259,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          170 words
+          447 words
         
       </span>
     
@@ -264,7 +270,7 @@
         
         
         
-          2 mins
+          4 mins
         
       </span>
     
@@ -309,55 +315,91 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Compliers-Week2</h1>
+            <h1 id="seo-header">Datalog-Based-Program-Analysis</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Lexical-Analysis"><a href="#Lexical-Analysis" class="headerlink" title="Lexical Analysis"></a>Lexical Analysis</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">if</span> (i == j)<br>    z = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">else</span><br>    z =<span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>\tif (i &#x3D;&#x3D; j)\n\t\tz &#x3D; 0;\n\telse\n\t\tz&#x3D; 1;</p>
-</blockquote>
+                <h1 id="1-Motivation"><a href="#1-Motivation" class="headerlink" title="1 - Motivation"></a>1 - Motivation</h1><h2 id="Imperative-vs-Declartive"><a href="#Imperative-vs-Declartive" class="headerlink" title="Imperative vs. Declartive"></a>Imperative vs. Declartive</h2><p>命令式语言 (java、c、c++)，声明式语言 (mysql)。</p>
 <ul>
-<li>Token Class (or Class)<br>-In English: Noun, verb, adj<br>-In a programming language: Identifier, Keywords, ‘(‘, ‘)’, Numbers …</li>
+<li>Imperative: how to do</li>
+<li>Declarative: what to do<br>可以理解为，命令式语言是告诉计算机每一步怎么做，声明式语言是告诉计算机做什么。</li>
 </ul>
-<p>Token 的类别：</p>
-<ul>
-<li>Identifier:<br>-strings of letters or digits, starting with a letter.</li>
-<li>Integer:<br>-a non-empty string of digits.</li>
-<li>Keyword:<br>-“else” or “if” or “begin” or …</li>
-<li>Whitespace:<br>-a non-empty sequene of blanks, newlines, and tabs.</li>
+<h1 id="2-Introduction-to-Datalog"><a href="#2-Introduction-to-Datalog" class="headerlink" title="2 - Introduction to Datalog"></a>2 - Introduction to Datalog</h1><ul>
+<li>Datalog is a declarative logic programming language that is a subset of Prolog.</li>
+<li>Datalog &#x3D; Data + Logic (and,or,not)</li>
 </ul>
-<p><strong>A Lexical Analysis implementation must do two things:</strong></p>
-<ol>
-<li>Recognize substrings corresponding to tokens.</li>
-<li>Identify the token class of each Iexeme.</li>
-</ol>
-<h2 id="Lexical-Analysis-Examples"><a href="#Lexical-Analysis-Examples" class="headerlink" title="Lexical Analysis Examples"></a>Lexical Analysis Examples</h2><p><strong>LA Examples - lookhead</strong></p>
+<h2 id="Atoms"><a href="#Atoms" class="headerlink" title="Atoms"></a>Atoms</h2><ul>
+<li>Atoms are basic elements of Datalog, which represent predicates of the form:</li>
+</ul>
+<img src="/images/Datalog-Based-Program-Analysis/atoms.png" srcset="/img/loading.gif" lazyload width=350>
+
+<h2 id="Datalog-Rules-Logical-and"><a href="#Datalog-Rules-Logical-and" class="headerlink" title="Datalog Rules &amp; Logical and"></a>Datalog Rules &amp; Logical and</h2><ul>
+<li>Rule is a way of expressing logical inferences</li>
+<li>Rules also serve to specify how facts are deduced</li>
+<li>The form of a rule is</li>
+</ul>
+<img src="/images/Datalog-Based-Program-Analysis/rules.png" srcset="/img/loading.gif" lazyload width=500>
+
 <blockquote>
-<p>DO 5 I &#x3D; 1, 25<br>DO 5 I &#x3D; 1.25 -&gt; DO5I &#x3D; 1.25</p>
+<p>括号种的 ‘,’ 就是代表的逻辑与。</p>
 </blockquote>
-<ol>
-<li>The goal is to partition the string. This is implemented by reading left-to-right, recognizing one token at a time.</li>
-<li>“Lookahead” may be required to decide where one token ends and the next token begins.<blockquote>
-<p>设计 lexical 规则时，很重要的 goal 之一就是，尽可能少的 lookahead,<br>Fortran 里面，空格是没有意义的，在这个例子中就需要 lookahead 来理解语句的真实意图。</p>
+<h2 id="Interpretation-of-Datalog-Rules"><a href="#Interpretation-of-Datalog-Rules" class="headerlink" title="Interpretation of Datalog Rules"></a>Interpretation of Datalog Rules</h2><p>如何解读 Datalog Rules</p>
+<ul>
+<li>枚举关系表达式的可能取值组合带入子目标。</li>
+<li>所有符合的 atoms 组成 head。</li>
+</ul>
+<p><em><strong>Datalog program &#x3D; Facts + Rules</strong></em></p>
+<h2 id="EDB-and-IDB-Predicates"><a href="#EDB-and-IDB-Predicates" class="headerlink" title="EDB and IDB Predicates"></a>EDB and IDB Predicates</h2><ol>
+<li>EDB: 在执行前就已经定义好的，可以看作一个输入，是不可变的。</li>
+<li>IDB：就是 rules 计算出来的，可以看作一个输出<blockquote>
+<ul>
+<li>Head can only be IDB</li>
+<li>Body can be EDB or IDB</li>
+</ul>
 </blockquote>
 </li>
 </ol>
-<p><strong>LA Examples C++</strong></p>
-<ul>
-<li>C++ template syntax: <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">FOO&lt;Bar&gt;<br></code></pre></td></tr></table></figure></li>
-<li>C++ stream syntax: <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">cin &gt;&gt; var<br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>下面这条语句会使这两个混淆</p>
+<h2 id="Logical-Or"><a href="#Logical-Or" class="headerlink" title="Logical Or"></a>Logical Or</h2><p>There are two ways to express logical or in Datalog.</p>
+<ol>
+<li>Write multiple rules <strong>with the same head</strong><blockquote>
+<p>SportFan(person) &lt;- Hobby(person, “jogging”).<br>SportFan(person) &lt;- Hobby(person,”swimming”).</p>
 </blockquote>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">Foo&lt;Bar&lt;Bazz&gt;&gt;<br></code></pre></td></tr></table></figure></li>
+</li>
+<li>Use logical or operator “;”<blockquote>
+<p>SportFan(person) &lt;-<br>  Hobby(person, “joggin”);<br>  Hobby(person, “swimming”).</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="Negation"><a href="#Negation" class="headerlink" title="Negation"></a>Negation</h2><ul>
+<li>Negated subgoal is written as !B(…), and read as not B(…)</li>
 </ul>
-<p><strong>Summarize</strong></p>
+<h2 id="Recursion-递归"><a href="#Recursion-递归" class="headerlink" title="Recursion (递归)"></a>Recursion (递归)</h2><h2 id="Rule-Safety"><a href="#Rule-Safety" class="headerlink" title="Rule Safety"></a>Rule Safety</h2><ul>
+<li>A(x) &lt;- B(y), x &gt; y.</li>
+<li>A(x) &lt;- B(y), !C(x, y).</li>
+</ul>
+<p>由于x有无限的取值能满足规则，所以生成的A是一个无限大的关系。因此上述两条规则是不安全的。在Datalog中，只接受安全的规则。</p>
+<p>这里我们需要记住一个判定的准则：如果规则中的每个变量至少在一个non-nageted relational atom中出现一次，那么这个规则是安全的。</p>
+<p>这实际上是借助已有的predicates（它们必定是有限的）来限制变量的取值范围。</p>
 <ul>
-<li>The goal of lexical analysis is to<br>-Partition the input string into lexemes<br>-Identify the token of each lexeme</li>
-<li>Left-to-right scan &#x3D;&gt; lookahead sometimes required.</li>
+<li>A(x) &lt;- B(x), !A(x)</li>
 </ul>
+<p>不要把recursion和negation写在同一条规则里，即避免写出非A推导出A这样的规则，这样的规则是没有意义的。</p>
+<h2 id="Execution-of-Datalog-Programs"><a href="#Execution-of-Datalog-Programs" class="headerlink" title="Execution of Datalog Programs"></a>Execution of Datalog Programs</h2><img src="/images/Datalog-Based-Program-Analysis/execution.png" srcset="/img/loading.gif" lazyload width=500>
+
+<p>Datalog 两大特性：</p>
+<ul>
+<li>单调，以为 facts 不会被删除</li>
+<li>必然终止，IDB的大小也是有限的</li>
+</ul>
+<h1 id="3-Pointer-Analysis-via-Datalog"><a href="#3-Pointer-Analysis-via-Datalog" class="headerlink" title="3 - Pointer Analysis via Datalog"></a>3 - Pointer Analysis via Datalog</h1><ul>
+<li>EDB：从程序的语义分析中能得到的与指针相关的信息</li>
+<li>IDB：指针分析的结果</li>
+<li>Rules：指针分析的规则</li>
+</ul>
+<img src="/images/Datalog-Based-Program-Analysis/model.png" srcset="/img/loading.gif" lazyload width=550>
+
+<h1 id="4-Taint-Analysis-via-Datalog"><a href="#4-Taint-Analysis-via-Datalog" class="headerlink" title="4 - Taint Analysis via Datalog"></a>4 - Taint Analysis via Datalog</h1><p><img src="G:\blog\hexo-blog\source\images\Datalog-Based-Program-Analysis\model.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -376,7 +418,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Compilers/" class="category-chain-item">Compilers</a>
+  <a href="/categories/Static-Analysis/" class="category-chain-item">Static Analysis</a>
   
   
 
@@ -391,7 +433,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/CS143/" class="print-no-link">#CS143</a>
+        <a href="/tags/NJU/" class="print-no-link">#NJU</a>
       
     </div>
   
@@ -403,8 +445,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Compliers-Week2</div>
-      <div>http://example.com/2024/03/13/Compliers-Week2/</div>
+      <div>Datalog-Based-Program-Analysis</div>
+      <div>http://example.com/2024/03/19/Datalog-Based-Program-Analysis/</div>
     </div>
     <div class="license-meta">
       
@@ -416,7 +458,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>March 13, 2024</div>
+          <div>March 19, 2024</div>
         </div>
       
       
@@ -448,18 +490,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/19/Datalog-Based-Program-Analysis/" title="Datalog-Based-Program-Analysis">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Datalog-Based-Program-Analysis</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/03/12/Compliers-Week1/" title="Compliers-Week1">
-                        <span class="hidden-mobile">Compliers-Week1</span>
+                      <a href="/2024/03/13/Compliers-Week2/" title="Compliers-Week2">
+                        <span class="hidden-mobile">Compliers-Week2</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

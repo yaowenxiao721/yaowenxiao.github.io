@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/images/Pointer-Analysis/Pointer-Analysis-Algorithms.png">
 <meta property="og:image" content="http://example.com/images/Pointer-Analysis/cf.png">
 <meta property="article:published_time" content="2024-03-07T08:47:33.000Z">
-<meta property="article:modified_time" content="2024-03-16T05:53:21.027Z">
+<meta property="article:modified_time" content="2024-03-18T07:10:48.312Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
@@ -363,7 +363,7 @@
 <img src="/images/Pointer-Analysis/Flow-Sensitivity.png" srcset="/img/loading.gif" lazyload width=500>
 
 <blockquote>
-<p>Flow-insensitive 就是忽略了控制流消息，表层来看的话就是去并集涵盖所有情况。<br>并没有证据表明 Flow-sensitive 的效果会比 Flow-insensitive 的效果好，所以主流的一些分析器是用的 Flow-insensitive。</p>
+<p>Flow-insensitive 就是忽略了控制流消息，表层来看的话就是取并集涵盖所有情况。<br>并没有证据表明 Flow-sensitive 的效果会比 Flow-insensitive 的效果好，所以主流的一些分析器是用的 Flow-insensitive。</p>
 </blockquote>
 <h3 id="Analysis-Scope-Whole-pragram-Demand-driven"><a href="#Analysis-Scope-Whole-pragram-Demand-driven" class="headerlink" title="Analysis Scope - Whole-pragram &amp; Demand-driven"></a>Analysis Scope - Whole-pragram &amp; Demand-driven</h3><img src="/images/Pointer-Analysis/Analysis-Scope.png" srcset="/img/loading.gif" lazyload width=500>
 
@@ -438,14 +438,14 @@
 </ol>
 <h2 id="2-How-to-Implement-Pointer-Analysis"><a href="#2-How-to-Implement-Pointer-Analysis" class="headerlink" title="2 - How to Implement Pointer Analysis"></a>2 - How to Implement Pointer Analysis</h2><p>使用图的方式来解决传播指针集的问题。</p>
 <h3 id="Pointer-Flow-Graph-PFG"><a href="#Pointer-Flow-Graph-PFG" class="headerlink" title="Pointer Flow Graph (PFG)"></a>Pointer Flow Graph (PFG)</h3><p><strong>Define:</strong></p>
-<p>Pointer flow graph of a program is a directed graph that expresses how objects flow among th pointers in the program.</p>
+<p>Pointer flow graph of a program is a directed graph that expresses how objects flow among the pointers in the program.</p>
 <ul>
 <li>Nodes: Pointer &#x3D; V U (O x F)<blockquote>
-<p>A node n represents a variable or a field of ana abstract object</p>
+<p>A node n represents a variable or a field of an abstract object</p>
 </blockquote>
 </li>
 <li>Edges: Pointer x Pointer<blockquote>
-<p>An edge x -&gt; y means that the objects pointed by pointer x may flow to (and also be pointed to by) pointer y.</p>
+<p>An edge x -&gt; y means that the objects pointed by pointer x may flow to (and also be pointed to y) pointer y.</p>
 </blockquote>
 </li>
 </ul>
