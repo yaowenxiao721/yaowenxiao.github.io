@@ -26,10 +26,13 @@
 <meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/atoms.png">
 <meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/rules.png">
 <meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/execution.png">
-<meta property="og:image" content="http://example.com/2024/03/19/images/Datalog-Based-Program-Analysis/model.png">
-<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/rules.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/model.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/example.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/method-call.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/source.png">
+<meta property="og:image" content="http://example.com/images/Datalog-Based-Program-Analysis/sink.png">
 <meta property="article:published_time" content="2024-03-19T04:24:04.000Z">
-<meta property="article:modified_time" content="2024-03-19T09:15:08.119Z">
+<meta property="article:modified_time" content="2024-03-19T12:16:25.152Z">
 <meta property="article:author" content="Yao wenxiao">
 <meta property="article:tag" content="NJU">
 <meta name="twitter:card" content="summary_large_image">
@@ -259,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          447 words
+          501 words
         
       </span>
     
@@ -270,7 +273,7 @@
         
         
         
-          4 mins
+          5 mins
         
       </span>
     
@@ -397,9 +400,52 @@
 <li>IDB：指针分析的结果</li>
 <li>Rules：指针分析的规则</li>
 </ul>
-<img src="../images/Datalog-Based-Program-Analysis/model.png" srcset="/img/loading.gif" lazyload width=550>
+<img src="/images/Datalog-Based-Program-Analysis/model.png" srcset="/img/loading.gif" lazyload width=550>
 
-<h1 id="4-Taint-Analysis-via-Datalog"><a href="#4-Taint-Analysis-via-Datalog" class="headerlink" title="4 - Taint Analysis via Datalog"></a>4 - Taint Analysis via Datalog</h1><p><img src="/../images/Datalog-Based-Program-Analysis/rules.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="An-Example"><a href="#An-Example" class="headerlink" title="An Example"></a>An Example</h2><img src="/images/Datalog-Based-Program-Analysis/example.png" srcset="/img/loading.gif" lazyload width=500>
+
+<h2 id="Handle-Method-Calls"><a href="#Handle-Method-Calls" class="headerlink" title="Handle Method Calls"></a>Handle Method Calls</h2><img src="/images/Datalog-Based-Program-Analysis/method-call.png" srcset="/img/loading.gif" lazyload width=500>
+
+<h2 id="Whole-Program-Pointer-Analysis"><a href="#Whole-Program-Pointer-Analysis" class="headerlink" title="Whole-Program Pointer Analysis"></a>Whole-Program Pointer Analysis</h2><p>全程序指针分析需要添加入口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs datalog">Reacherable(m) &lt;-<br>    EntryMethod(m).<br>VarPointsTo(x, o) &lt;-<br>    Reachable(m),<br>    New(x, 0, m).<br></code></pre></td></tr></table></figure>
+
+<h1 id="4-Taint-Analysis-via-Datalog"><a href="#4-Taint-Analysis-via-Datalog" class="headerlink" title="4 - Taint Analysis via Datalog"></a>4 - Taint Analysis via Datalog</h1><h2 id="Datalog-Model"><a href="#Datalog-Model" class="headerlink" title="Datalog Model"></a>Datalog Model</h2><ul>
+<li>EDB predicates<ul>
+<li>Source(m : M)</li>
+<li>Sink(m : M)</li>
+<li>Taint(l : S, t : T)</li>
+</ul>
+</li>
+<li>IDB predicate<ul>
+<li>TaintFlow(t : T, m : M)</li>
+</ul>
+</li>
+</ul>
+<h2 id="Datalog-Rules"><a href="#Datalog-Rules" class="headerlink" title="Datalog Rules"></a>Datalog Rules</h2><ul>
+<li>Handles sources (generates tainted data)</li>
+</ul>
+<img src="/images/Datalog-Based-Program-Analysis/source.png" srcset="/img/loading.gif" lazyload width=500>
+
+<ul>
+<li>Handles sinks (generates taint flow information)</li>
+</ul>
+<img src="/images/Datalog-Based-Program-Analysis/sink.png" srcset="/img/loading.gif" lazyload width=500>
+
+<h2 id="Key-Point"><a href="#Key-Point" class="headerlink" title="Key Point"></a>Key Point</h2><ul>
+<li><p>Pros</p>
+<ul>
+<li>Succinct and readable</li>
+<li>Easy to implement</li>
+<li>Benefit from off-the-shelf optimized Datalog engines</li>
+</ul>
+</li>
+<li><p>Cons</p>
+<ul>
+<li>Restricted expressiveness, i.e., it is impossible or inconvenient to express some logics</li>
+<li>Cannot fully control performance</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -489,6 +535,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/03/21/CFL-Reachability-and-IFDS/" title="CFL-Reachability-and-IFDS">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CFL-Reachability-and-IFDS</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
